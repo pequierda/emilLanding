@@ -1,0 +1,503 @@
+/* Galaxy Background */
+.galaxy-background {
+    background: radial-gradient(ellipse at bottom, #1B2735 0%, #090A0F 100%);
+    position: relative;
+    overflow: hidden;
+    font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+}
+
+/* Twinkling Stars */
+.stars-container {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    z-index: 1;
+}
+
+.stars, .stars2, .stars3 {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: transparent;
+}
+
+.stars {
+    background-image: 
+        radial-gradient(2px 2px at 20px 30px, #eee, transparent),
+        radial-gradient(2px 2px at 60px 70px, #fff, transparent),
+        radial-gradient(1px 1px at 50px 50px, #ddd, transparent),
+        radial-gradient(1px 1px at 130px 80px, #fff, transparent),
+        radial-gradient(2px 2px at 90px 10px, #fff, transparent);
+    background-repeat: repeat;
+    background-size: 200px 200px;
+    animation: twinkle 4s ease-in-out infinite;
+    opacity: 0.8;
+}
+
+.stars2 {
+    background-image: 
+        radial-gradient(1px 1px at 40px 60px, #fff, transparent),
+        radial-gradient(1px 1px at 110px 90px, #ddd, transparent),
+        radial-gradient(2px 2px at 80px 20px, #fff, transparent);
+    background-repeat: repeat;
+    background-size: 250px 250px;
+    animation: twinkle 5s ease-in-out 1s infinite;
+    opacity: 0.6;
+}
+
+.stars3 {
+    background-image: 
+        radial-gradient(1px 1px at 70px 40px, #fff, transparent),
+        radial-gradient(2px 2px at 150px 100px, #ddd, transparent),
+        radial-gradient(1px 1px at 20px 120px, #fff, transparent);
+    background-repeat: repeat;
+    background-size: 300px 300px;
+    animation: twinkle 6s ease-in-out 2s infinite;
+    opacity: 0.5;
+}
+
+@keyframes twinkle {
+    0%, 100% { opacity: 0.5; }
+    50% { opacity: 1; }
+}
+
+/* Central Sun */
+.sun {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 120px;
+    height: 120px;
+    pointer-events: none;
+    z-index: 2;
+}
+
+.sun-core {
+    font-size: 80px;
+    animation: pulse 3s ease-in-out infinite;
+    filter: drop-shadow(0 0 40px rgba(255, 200, 0, 0.8));
+}
+
+@keyframes pulse {
+    0%, 100% {
+        transform: scale(1);
+        filter: drop-shadow(0 0 40px rgba(255, 200, 0, 0.8));
+    }
+    50% {
+        transform: scale(1.1);
+        filter: drop-shadow(0 0 60px rgba(255, 200, 0, 1));
+    }
+}
+
+/* Solar System Orbits */
+.solar-system {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    z-index: 2;
+}
+
+.orbit {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 50%;
+    transform: translate(-50%, -50%);
+}
+
+.orbit-1 { width: 180px; height: 180px; }
+.orbit-2 { width: 260px; height: 260px; }
+.orbit-3 { width: 340px; height: 340px; }
+.orbit-4 { width: 420px; height: 420px; }
+.orbit-5 { width: 520px; height: 520px; }
+.orbit-6 { width: 620px; height: 620px; }
+
+.planet {
+    position: absolute;
+    font-size: 30px;
+    top: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    animation: orbit linear infinite;
+}
+
+.planet-mercury { animation-duration: 8s; font-size: 20px; }
+.planet-venus { animation-duration: 12s; font-size: 25px; }
+.planet-earth { animation-duration: 16s; font-size: 28px; }
+.planet-mars { animation-duration: 20s; font-size: 24px; }
+.planet-jupiter { animation-duration: 28s; font-size: 35px; }
+.planet-saturn { animation-duration: 35s; font-size: 38px; }
+
+@keyframes orbit {
+    0% {
+        transform: translateX(-50%) rotate(0deg) translateX(0) rotate(0deg);
+    }
+    100% {
+        transform: translateX(-50%) rotate(360deg) translateX(0) rotate(-360deg);
+    }
+}
+
+/* Asteroids */
+.asteroids {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    z-index: 3;
+}
+
+.asteroid {
+    position: absolute;
+    font-size: 28px;
+    animation: asteroidFloat linear infinite;
+    filter: drop-shadow(0 0 10px rgba(255, 150, 50, 0.6));
+}
+
+.asteroid-1 {
+    top: 10%;
+    right: -50px;
+    animation-duration: 15s;
+}
+
+.asteroid-2 {
+    top: 30%;
+    right: -50px;
+    animation-duration: 20s;
+    animation-delay: 5s;
+}
+
+.asteroid-3 {
+    top: 60%;
+    right: -50px;
+    animation-duration: 18s;
+    animation-delay: 10s;
+}
+
+.asteroid-4 {
+    top: 80%;
+    right: -50px;
+    animation-duration: 22s;
+    animation-delay: 3s;
+}
+
+@keyframes asteroidFloat {
+    0% {
+        right: -50px;
+        transform: rotate(0deg);
+    }
+    100% {
+        right: 110%;
+        transform: rotate(360deg);
+    }
+}
+
+/* Shooting Stars */
+.shooting-stars {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    z-index: 3;
+}
+
+.shooting-star {
+    position: absolute;
+    width: 2px;
+    height: 2px;
+    background: white;
+    box-shadow: 0 0 10px 2px rgba(255, 255, 255, 0.8);
+    animation: shoot 3s linear infinite;
+}
+
+.shooting-star:nth-child(1) {
+    top: 10%;
+    left: 20%;
+    animation-delay: 0s;
+}
+
+.shooting-star:nth-child(2) {
+    top: 40%;
+    left: 60%;
+    animation-delay: 2s;
+}
+
+.shooting-star:nth-child(3) {
+    top: 70%;
+    left: 30%;
+    animation-delay: 4s;
+}
+
+@keyframes shoot {
+    0% {
+        transform: translateX(0) translateY(0);
+        opacity: 1;
+    }
+    70% {
+        opacity: 1;
+    }
+    100% {
+        transform: translateX(300px) translateY(300px);
+        opacity: 0;
+    }
+}
+
+/* Custom Animations */
+@keyframes slideUp {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(-20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.animate-fade-in {
+    animation: fadeIn 0.8s ease-out;
+}
+
+.link-card {
+    animation: slideUp 0.5s ease-out backwards;
+}
+
+/* Visitor Counter */
+.visitor-counter {
+    animation: fadeIn 1s ease-out;
+}
+
+.visitor-count {
+    font-variant-numeric: tabular-nums;
+    letter-spacing: 0.05em;
+}
+
+.profile-image {
+    transition: transform 0.3s ease;
+}
+
+.profile-image:hover {
+    transform: scale(1.1);
+}
+
+.icon-wrapper {
+    transition: all 0.3s ease;
+}
+
+.link-card:hover .icon-wrapper {
+    background-color: #5C6BC0;
+    color: white;
+}
+
+.arrow-icon {
+    transition: all 0.3s ease;
+}
+
+.link-card:hover .arrow-icon {
+    transform: translateX(0.25rem);
+    color: #5C6BC0;
+}
+
+.link-card-title {
+    transition: color 0.3s ease;
+}
+
+.link-card:hover .link-card-title {
+    color: #5C6BC0;
+}
+
+/* Responsive Design */
+
+/* Mobile Devices (up to 640px) */
+@media (max-width: 640px) {
+    /* Sun - smaller on mobile */
+    .sun {
+        width: 60px;
+        height: 60px;
+    }
+    
+    .sun-core {
+        font-size: 40px;
+    }
+    
+    /* Smaller orbit paths for mobile */
+    .orbit-1 { width: 100px; height: 100px; }
+    .orbit-2 { width: 140px; height: 140px; }
+    .orbit-3 { width: 180px; height: 180px; }
+    .orbit-4 { width: 220px; height: 220px; }
+    .orbit-5 { width: 270px; height: 270px; }
+    .orbit-6 { width: 320px; height: 320px; }
+    
+    /* Smaller planets */
+    .planet {
+        font-size: 18px;
+    }
+    
+    .planet-mercury { font-size: 14px; }
+    .planet-venus { font-size: 16px; }
+    .planet-earth { font-size: 18px; }
+    .planet-mars { font-size: 16px; }
+    .planet-jupiter { font-size: 22px; }
+    .planet-saturn { font-size: 24px; }
+    
+    /* Smaller asteroids */
+    .asteroid {
+        font-size: 18px;
+    }
+    
+    /* Profile image */
+    .profile-image {
+        width: 100px !important;
+        height: 100px !important;
+    }
+    
+    /* Text adjustments */
+    h1 {
+        font-size: 2rem !important;
+    }
+    
+    p.text-xl {
+        font-size: 1rem !important;
+    }
+    
+    /* Link cards - full width on mobile */
+    .links-grid {
+        gap: 1rem !important;
+    }
+    
+    .link-card {
+        padding: 1rem !important;
+    }
+    
+    .link-card-title {
+        font-size: 1.125rem !important;
+    }
+    
+    .icon-wrapper {
+        width: 2.5rem !important;
+        height: 2.5rem !important;
+    }
+    
+    .icon-wrapper svg {
+        width: 1.25rem !important;
+        height: 1.25rem !important;
+    }
+}
+
+/* Tablet Devices (641px to 1024px) */
+@media (min-width: 641px) and (max-width: 1024px) {
+    /* Sun - medium size for tablets */
+    .sun {
+        width: 90px;
+        height: 90px;
+    }
+    
+    .sun-core {
+        font-size: 60px;
+    }
+    
+    /* Medium orbit paths for tablets */
+    .orbit-1 { width: 140px; height: 140px; }
+    .orbit-2 { width: 200px; height: 200px; }
+    .orbit-3 { width: 260px; height: 260px; }
+    .orbit-4 { width: 320px; height: 320px; }
+    .orbit-5 { width: 400px; height: 400px; }
+    .orbit-6 { width: 480px; height: 480px; }
+    
+    /* Medium planets */
+    .planet {
+        font-size: 24px;
+    }
+    
+    .planet-mercury { font-size: 16px; }
+    .planet-venus { font-size: 20px; }
+    .planet-earth { font-size: 22px; }
+    .planet-mars { font-size: 20px; }
+    .planet-jupiter { font-size: 28px; }
+    .planet-saturn { font-size: 30px; }
+    
+    /* Medium asteroids */
+    .asteroid {
+        font-size: 22px;
+    }
+    
+    /* Profile image */
+    .profile-image {
+        width: 120px !important;
+        height: 120px !important;
+    }
+    
+    /* Text adjustments */
+    h1 {
+        font-size: 3rem !important;
+    }
+}
+
+/* Large Desktops (1440px and up) */
+@media (min-width: 1440px) {
+    /* Larger orbits for big screens */
+    .orbit-1 { width: 220px; height: 220px; }
+    .orbit-2 { width: 300px; height: 300px; }
+    .orbit-3 { width: 380px; height: 380px; }
+    .orbit-4 { width: 480px; height: 480px; }
+    .orbit-5 { width: 600px; height: 600px; }
+    .orbit-6 { width: 720px; height: 720px; }
+    
+    .sun {
+        width: 140px;
+        height: 140px;
+    }
+    
+    .sun-core {
+        font-size: 100px;
+    }
+}
+
+/* Fix for touch devices - remove hover transform on mobile */
+@media (hover: none) and (pointer: coarse) {
+    .link-card:hover {
+        transform: none !important;
+    }
+    
+    .link-card:active {
+        transform: scale(0.98);
+        transition: transform 0.1s;
+    }
+}
+
+/* Reduce animations on devices that prefer reduced motion */
+@media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+    }
+}
+
