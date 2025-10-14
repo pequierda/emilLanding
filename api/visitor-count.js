@@ -34,7 +34,8 @@ export default async function handler(req, res) {
             try {
                 const url = new URL(referrer);
                 referrerDomain = url.hostname.replace('www.', '');
-                referrerPath = url.pathname + url.search;
+                const fullPath = url.pathname + url.search;
+                referrerPath = (fullPath === '/' || fullPath === '') ? 'Homepage' : fullPath;
             } catch (e) {
                 referrerDomain = referrer;
             }
