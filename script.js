@@ -6,7 +6,15 @@ async function updateVisitorCount() {
     if (!visitorCountElement) return;
 
     try {
-        const response = await fetch('/api/visitor-count');
+        const referrer = document.referrer || 'Direct';
+        
+        const response = await fetch('/api/visitor-count', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ referrer })
+        });
         const data = await response.json();
         
         if (data.count !== undefined) {
@@ -18,7 +26,8 @@ async function updateVisitorCount() {
                     IP: data.visitor.ip,
                     Device: data.visitor.device,
                     Browser: data.visitor.browser,
-                    OS: data.visitor.os
+                    OS: data.visitor.os,
+                    Referrer: data.visitor.referrer
                 });
             }
         } else {
@@ -98,4 +107,3 @@ function addLinkCard(title, description, url, icon) {
     
     container.appendChild(card);
 }
-

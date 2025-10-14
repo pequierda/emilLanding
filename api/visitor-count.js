@@ -22,6 +22,12 @@ export default async function handler(req, res) {
             return res.status(500).json({ error: 'Upstash configuration missing' });
         }
 
+        // Get referrer from request body
+        let referrer = 'Direct';
+        if (req.method === 'POST' && req.body?.referrer) {
+            referrer = req.body.referrer;
+        }
+
         // Get visitor information
         const ip = req.headers['x-forwarded-for'] || 
                    req.headers['x-real-ip'] || 
@@ -67,10 +73,11 @@ export default async function handler(req, res) {
 
         // Store visitor details
         const visitorData = {
-            ip: ip.split(',')[0].trim(), // Get first IP if multiple
+            ip: ip.split(',')[0].trim(),
             device: deviceInfo,
             timestamp: timestamp,
-            count: count
+            count: count,
+            referrer: referrer
         };
 
         // Store visitor info in Redis (optional - for analytics)
@@ -89,7 +96,8 @@ export default async function handler(req, res) {
                 ip: visitorData.ip,
                 device: deviceInfo.device,
                 browser: deviceInfo.browser,
-                os: deviceInfo.os
+                os: deviceInfo.os,
+                referrer: referrer
             }
         });
     } catch (error) {
