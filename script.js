@@ -1,6 +1,27 @@
 // Custom JavaScript for Landing Page
 
+// Visitor Counter using API
+async function updateVisitorCount() {
+    const visitorCountElement = document.querySelector('.visitor-count');
+    if (!visitorCountElement) return;
+
+    try {
+        const response = await fetch('https://api.countapi.xyz/hit/emillanding/visits');
+        const data = await response.json();
+        
+        if (data.value) {
+            visitorCountElement.textContent = data.value.toLocaleString();
+        }
+    } catch (error) {
+        console.error('Failed to update visitor count:', error);
+        visitorCountElement.textContent = '---';
+    }
+}
+
 document.addEventListener('DOMContentLoaded', function() {
+    // Update visitor count
+    updateVisitorCount();
+
     // Add animation delays to link cards
     const linkCards = document.querySelectorAll('.link-card');
     linkCards.forEach((card, index) => {
