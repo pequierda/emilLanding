@@ -27,7 +27,9 @@ async function updateVisitorCount() {
                     Device: data.visitor.device,
                     Browser: data.visitor.browser,
                     OS: data.visitor.os,
-                    Referrer: data.visitor.referrer
+                    'Referrer (Full URL)': data.visitor.referrer,
+                    'Referrer Domain': data.visitor.referrerDomain,
+                    'Referrer Path': data.visitor.referrerPath
                 });
             }
         } else {

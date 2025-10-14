@@ -24,8 +24,20 @@ export default async function handler(req, res) {
 
         // Get referrer from request body
         let referrer = 'Direct';
+        let referrerDomain = 'Direct';
+        let referrerPath = '';
+        
         if (req.method === 'POST' && req.body?.referrer) {
             referrer = req.body.referrer;
+            
+            // Parse referrer to extract domain and path
+            try {
+                const url = new URL(referrer);
+                referrerDomain = url.hostname.replace('www.', '');
+                referrerPath = url.pathname + url.search;
+            } catch (e) {
+                referrerDomain = referrer;
+            }
         }
 
         // Get visitor information
@@ -77,7 +89,9 @@ export default async function handler(req, res) {
             device: deviceInfo,
             timestamp: timestamp,
             count: count,
-            referrer: referrer
+            referrer: referrer,
+            referrerDomain: referrerDomain,
+            referrerPath: referrerPath
         };
 
         // Store visitor info in Redis (optional - for analytics)
@@ -97,7 +111,9 @@ export default async function handler(req, res) {
                 device: deviceInfo.device,
                 browser: deviceInfo.browser,
                 os: deviceInfo.os,
-                referrer: referrer
+                referrer: referrer,
+                referrerDomain: referrerDomain,
+                referrerPath: referrerPath
             }
         });
     } catch (error) {
