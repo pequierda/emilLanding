@@ -1,17 +1,26 @@
 // Custom JavaScript for Landing Page
 
-// Visitor Counter using API
-async function updateVisitorCount() {
+// Visitor Counter using Local Storage
+function updateVisitorCount() {
     const visitorCountElement = document.querySelector('.visitor-count');
     if (!visitorCountElement) return;
 
     try {
-        const response = await fetch('https://api.countapi.xyz/hit/emillanding/visits');
-        const data = await response.json();
+        // Get current count from localStorage
+        let count = localStorage.getItem('visitorCount');
         
-        if (data.value) {
-            visitorCountElement.textContent = data.value.toLocaleString();
+        // If no count exists, initialize it
+        if (count === null) {
+            count = 1;
+        } else {
+            count = parseInt(count) + 1;
         }
+        
+        // Store the updated count
+        localStorage.setItem('visitorCount', count.toString());
+        
+        // Display the count
+        visitorCountElement.textContent = count.toLocaleString();
     } catch (error) {
         console.error('Failed to update visitor count:', error);
         visitorCountElement.textContent = '---';
