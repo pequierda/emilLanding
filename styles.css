@@ -4,6 +4,29 @@
     position: relative;
     overflow: hidden;
     font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+    min-height: 100vh;
+    width: 100%;
+}
+
+/* Mobile Responsiveness */
+@media (max-width: 640px) {
+    .container {
+        padding-left: 1rem;
+        padding-right: 1rem;
+    }
+    
+    .link-card {
+        margin-bottom: 0.5rem;
+    }
+    
+    .profile-image {
+        width: 6rem;
+        height: 6rem;
+    }
+    
+    .visitor-counter {
+        margin-bottom: 1rem;
+    }
 }
 
 /* Twinkling Stars */
