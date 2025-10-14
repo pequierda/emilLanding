@@ -22,23 +22,32 @@ export default async function handler(req, res) {
             return res.status(500).json({ error: 'Upstash configuration missing' });
         }
 
-        // Get referrer from request body
+        // Get data from request body
         let referrer = 'Direct';
         let referrerDomain = 'Direct';
         let referrerPath = '';
+        let visitorId = 'unknown';
+        let isReturning = false;
         
-        if (req.method === 'POST' && req.body?.referrer) {
-            referrer = req.body.referrer;
-            
-            // Parse referrer to extract domain and path
-            try {
-                const url = new URL(referrer);
-                referrerDomain = url.hostname.replace('www.', '');
-                const fullPath = url.pathname + url.search;
-                referrerPath = (fullPath === '/' || fullPath === '') ? 'Homepage' : fullPath;
-            } catch (e) {
-                referrerDomain = referrer;
+        if (req.method === 'POST' && req.body) {
+            // Get referrer
+            if (req.body.referrer) {
+                referrer = req.body.referrer;
+                
+                // Parse referrer to extract domain and path
+                try {
+                    const url = new URL(referrer);
+                    referrerDomain = url.hostname.replace('www.', '');
+                    const fullPath = url.pathname + url.search;
+                    referrerPath = (fullPath === '/' || fullPath === '') ? 'Homepage' : fullPath;
+                } catch (e) {
+                    referrerDomain = referrer;
+                }
             }
+            
+            // Get visitor ID and returning status
+            visitorId = req.body.visitorId || 'unknown';
+            isReturning = req.body.isReturning || false;
         }
 
         // Get visitor information
@@ -86,6 +95,8 @@ export default async function handler(req, res) {
 
         // Store visitor details
         const visitorData = {
+            visitorId: visitorId,
+            isReturning: isReturning,
             ip: ip.split(',')[0].trim(),
             device: deviceInfo,
             timestamp: timestamp,
@@ -108,6 +119,8 @@ export default async function handler(req, res) {
         res.status(200).json({ 
             count,
             visitor: {
+                visitorId: visitorId,
+                isReturning: isReturning,
                 ip: visitorData.ip,
                 device: deviceInfo.device,
                 browser: deviceInfo.browser,
