@@ -1,26 +1,19 @@
 // Custom JavaScript for Landing Page
 
-// Visitor Counter using Local Storage
-function updateVisitorCount() {
+// Visitor Counter using Upstash Redis via API
+async function updateVisitorCount() {
     const visitorCountElement = document.querySelector('.visitor-count');
     if (!visitorCountElement) return;
 
     try {
-        // Get current count from localStorage
-        let count = localStorage.getItem('visitorCount');
+        const response = await fetch('/api/visitor-count');
+        const data = await response.json();
         
-        // If no count exists, initialize it
-        if (count === null) {
-            count = 1;
+        if (data.count !== undefined) {
+            visitorCountElement.textContent = data.count.toLocaleString();
         } else {
-            count = parseInt(count) + 1;
+            throw new Error('Invalid response format');
         }
-        
-        // Store the updated count
-        localStorage.setItem('visitorCount', count.toString());
-        
-        // Display the count
-        visitorCountElement.textContent = count.toLocaleString();
     } catch (error) {
         console.error('Failed to update visitor count:', error);
         visitorCountElement.textContent = '---';
