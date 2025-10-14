@@ -11,6 +11,16 @@ async function updateVisitorCount() {
         
         if (data.count !== undefined) {
             visitorCountElement.textContent = data.count.toLocaleString();
+            
+            // Log visitor info to console (for debugging)
+            if (data.visitor) {
+                console.log('Visitor Info:', {
+                    IP: data.visitor.ip,
+                    Device: data.visitor.device,
+                    Browser: data.visitor.browser,
+                    OS: data.visitor.os
+                });
+            }
         } else {
             throw new Error('Invalid response format');
         }
