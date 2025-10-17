@@ -235,8 +235,10 @@
                 </a>
             </div>
 
-            <button onclick="openQuoteGenerator()" 
-            class="link-card group block p-4 sm:p-6 bg-white rounded-2xl shadow-lg hover:shadow-2xl transform hover:-translate-y-2 transition-all duration-300 hover:bg-gray-50 w-full cursor-pointer">
+            <a href="https://quote-generator-swart-ten.vercel.app/" 
+            target="_blank"
+            rel="noopener noreferrer"
+            class="link-card group block p-4 sm:p-6 bg-white rounded-2xl shadow-lg hover:shadow-2xl transform hover:-translate-y-2 transition-all duration-300 hover:bg-gray-50 w-full">
              <div class="flex items-start space-x-3 sm:space-x-4">
                  <div class="flex-shrink-0">
                      <div class="icon-wrapper w-12 h-12 bg-indigo-50 rounded-xl flex items-center justify-center text-indigo-600">
@@ -257,111 +259,12 @@
                      </svg>
                  </div>
              </div>
-         </button>
+         </a>
      </div>
 
             <!-- Footer -->
             <div class="text-center text-white/80 text-sm">
                 <p>&copy; <span id="year"></span>. Al rights reserved.</p>
-            </div>
-        </div>
-    </div>
-
-    <!-- Quote Generator Modal -->
-    <div id="quoteModal" class="fixed inset-0 bg-black bg-opacity-50 hidden z-50 flex items-center justify-center p-4">
-        <div class="bg-white rounded-2xl shadow-2xl max-w-4xl w-full max-h-[90vh] overflow-hidden">
-            <!-- Modal Header -->
-            <div class="flex items-center justify-between p-6 border-b border-gray-200">
-                <div class="flex items-center space-x-3">
-                    <div class="w-10 h-10 bg-indigo-100 rounded-lg flex items-center justify-center">
-                        <svg class="w-6 h-6 text-indigo-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"></path>
-                        </svg>
-                    </div>
-                    <div>
-                        <h2 class="text-xl font-bold text-gray-900">Quote Generator & AI Chat</h2>
-                        <p class="text-sm text-gray-600">Get inspired and chat with AI</p>
-                    </div>
-                </div>
-                <button onclick="closeQuoteGenerator()" class="text-gray-400 hover:text-gray-600 transition-colors">
-                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
-                    </svg>
-                </button>
-            </div>
-
-            <!-- Modal Content -->
-            <div class="flex flex-col lg:flex-row h-[70vh]">
-                <!-- Quote Generator Section -->
-                <div class="lg:w-1/2 p-6 border-r border-gray-200">
-                    <div class="h-full flex flex-col">
-                        <h3 class="text-lg font-semibold text-gray-900 mb-4">Inspirational Quotes</h3>
-                        
-                        <!-- Quote Display -->
-                        <div class="flex-1 flex items-center justify-center">
-                            <div id="quoteDisplay" class="text-center p-6 bg-gradient-to-br from-indigo-50 to-purple-50 rounded-xl border border-indigo-100">
-                                <div class="text-4xl mb-4">💭</div>
-                                <p id="quoteText" class="text-lg text-gray-700 italic mb-2">Click "Generate Quote" to get started</p>
-                                <p id="quoteAuthor" class="text-sm text-gray-500"></p>
-                            </div>
-                        </div>
-
-                        <!-- Quote Controls -->
-                        <div class="mt-6 space-y-3">
-                            <button onclick="generateQuote()" 
-                                    class="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-medium py-3 px-4 rounded-lg transition-colors flex items-center justify-center space-x-2">
-                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path>
-                                </svg>
-                                <span>Generate New Quote</span>
-                            </button>
-                            
-                            <button onclick="copyQuote()" 
-                                    class="w-full bg-gray-100 hover:bg-gray-200 text-gray-700 font-medium py-2 px-4 rounded-lg transition-colors flex items-center justify-center space-x-2">
-                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"></path>
-                                </svg>
-                                <span>Copy Quote</span>
-                            </button>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- AI Chat Section -->
-                <div class="lg:w-1/2 p-6">
-                    <div class="h-full flex flex-col">
-                        <h3 class="text-lg font-semibold text-gray-900 mb-4">AI Assistant</h3>
-                        
-                        <!-- Chat Messages -->
-                        <div id="chatMessages" class="flex-1 overflow-y-auto space-y-4 mb-4 max-h-96">
-                            <div class="flex items-start space-x-3">
-                                <div class="w-8 h-8 bg-indigo-100 rounded-full flex items-center justify-center flex-shrink-0">
-                                    <svg class="w-4 h-4 text-indigo-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"></path>
-                                    </svg>
-                                </div>
-                                <div class="bg-gray-100 rounded-lg p-3 max-w-xs">
-                                    <p class="text-sm text-gray-700">Hello! I'm your AI assistant. How can I help you today?</p>
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- Chat Input -->
-                        <div class="flex space-x-2">
-                            <input type="text" 
-                                   id="chatInput" 
-                                   placeholder="Type your message..." 
-                                   class="flex-1 border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
-                                   onkeypress="handleChatKeyPress(event)">
-                            <button onclick="sendMessage()" 
-                                    class="bg-indigo-600 hover:bg-indigo-700 text-white px-4 py-2 rounded-lg transition-colors">
-                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8"></path>
-                                </svg>
-                            </button>
-                        </div>
-                    </div>
-                </div>
             </div>
         </div>
     </div>
