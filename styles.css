@@ -711,12 +711,6 @@ body:hover #cursor-trail {
         padding: 0 1rem;
     }
     
-    /* Button adjustments */
-    .theme-toggle-btn {
-        padding: 0.75rem 1.5rem !important;
-        font-size: 0.875rem !important;
-        min-height: 44px; /* Touch target size */
-    }
     
     /* Link cards - full width on mobile */
     .links-grid {
@@ -935,13 +929,6 @@ body:hover #cursor-trail {
         transform: translate(-50%, -50%) scale(1.1);
     }
     
-    .theme-toggle-btn:hover {
-        transform: none;
-    }
-    
-    .theme-toggle-btn:active {
-        transform: scale(0.95);
-    }
 }
 
 /* Dialog/Modal Normalization */
@@ -1102,36 +1089,6 @@ dialog::backdrop {
     }
 }
 
-/* Theme Toggle Button */
-.theme-toggle-btn {
-    transition: all 0.3s ease;
-}
-
-.theme-toggle-btn:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3);
-}
-
-.theme-toggle-btn:active {
-    transform: translateY(0);
-}
-
-/* Speed Control */
-.speed-fast .planet {
-    animation-duration: calc(var(--base-duration) * 0.3) !important;
-}
-
-.speed-fast .asteroid {
-    animation-duration: calc(var(--base-duration) * 0.3) !important;
-}
-
-.speed-slow .planet {
-    animation-duration: calc(var(--base-duration) * 2) !important;
-}
-
-.speed-slow .asteroid {
-    animation-duration: calc(var(--base-duration) * 2) !important;
-}
 
 /* Accessibility - Reduced Motion */
 @media (prefers-reduced-motion: reduce) {

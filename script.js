@@ -77,7 +77,7 @@ async function updateVisitorCount() {
         console.error('Failed to update visitor count:', error);
         const visitorCountElement = document.querySelector('.visitor-count');
         if (visitorCountElement) {
-            visitorCountElement.textContent = '---';
+        visitorCountElement.textContent = '---';
         }
     }
 }
@@ -400,7 +400,6 @@ function initProfileImage() {
                 "Welcome to my digital space",
                 "Explore the cosmos",
                 isTouchDevice() ? "Tap planets to learn!" : "Click planets to learn!",
-                "Try the speed toggle!",
                 "Enjoy the journey!"
             ];
             const randomMessage = messages[Math.floor(Math.random() * messages.length)];
@@ -413,37 +412,6 @@ function initProfileImage() {
     profileImage.addEventListener('touchend', handleProfileClick, { passive: false });
 }
 
-// Speed Toggle
-let currentSpeed = 'normal';
-const speedStates = ['normal', 'fast', 'slow'];
-
-function initSpeedToggle() {
-    const speedToggle = document.getElementById('speed-toggle');
-    const speedText = document.getElementById('speed-text');
-    
-    if (!speedToggle || !speedText) return;
-    
-    speedToggle.addEventListener('click', () => {
-        const currentIndex = speedStates.indexOf(currentSpeed);
-        const nextIndex = (currentIndex + 1) % speedStates.length;
-        currentSpeed = speedStates[nextIndex];
-        
-        document.body.classList.remove('speed-fast', 'speed-slow');
-        
-        switch(currentSpeed) {
-            case 'fast':
-                document.body.classList.add('speed-fast');
-                speedText.textContent = 'Fast Speed';
-                break;
-            case 'slow':
-                document.body.classList.add('speed-slow');
-                speedText.textContent = 'Slow Speed';
-                break;
-            default:
-                speedText.textContent = 'Normal Speed';
-        }
-    });
-}
 
 // Enhanced Link Cards
 function initLinkCards() {
@@ -496,7 +464,6 @@ document.addEventListener('DOMContentLoaded', function() {
     initPlanetModal();
     initInteractiveSun();
     initProfileImage();
-    initSpeedToggle();
     initLinkCards();
     initSmoothScroll();
     
