@@ -28,17 +28,14 @@ async function updateVisitorCount() {
     if (!visitorCountElement) return;
 
     try {
-        // Check if visitor has been here before
         let visitorId = getCookie('visitor_id');
         let isReturning = false;
         
         if (!visitorId) {
-            // New visitor - generate unique ID
             visitorId = generateVisitorId();
-            setCookie('visitor_id', visitorId, 365); // Cookie lasts 1 year
+            setCookie('visitor_id', visitorId, 365);
             isReturning = false;
         } else {
-            // Returning visitor
             isReturning = true;
         }
         
@@ -60,7 +57,6 @@ async function updateVisitorCount() {
         if (data.count !== undefined) {
             visitorCountElement.textContent = data.count.toLocaleString();
             
-            // Log visitor info to console (for debugging)
             if (data.visitor) {
                 console.log('Visitor Info:', {
                     'Visitor Type': data.visitor.isReturning ? '🔄 RETURNING' : '✨ NEW',
@@ -79,29 +75,330 @@ async function updateVisitorCount() {
         }
     } catch (error) {
         console.error('Failed to update visitor count:', error);
-        visitorCountElement.textContent = '---';
+        const visitorCountElement = document.querySelector('.visitor-count');
+        if (visitorCountElement) {
+            visitorCountElement.textContent = '---';
+        }
     }
 }
 
-document.addEventListener('DOMContentLoaded', function() {
-    // Update visitor count
-    updateVisitorCount();
+// Interactive Cursor Trail
+let cursorTrail = null;
+let mouseX = 0;
+let mouseY = 0;
+let trailX = 0;
+let trailY = 0;
 
-    // Add animation delays to link cards
-    const linkCards = document.querySelectorAll('.link-card');
-    linkCards.forEach((card, index) => {
-        card.style.animationDelay = `${index * 0.1}s`;
+function initCursorTrail() {
+    cursorTrail = document.getElementById('cursor-trail');
+    if (!cursorTrail) return;
+
+    document.addEventListener('mousemove', (e) => {
+        mouseX = e.clientX;
+        mouseY = e.clientY;
     });
 
-    // Optional: Add click tracking
-    linkCards.forEach(card => {
+    function animateTrail() {
+        trailX += (mouseX - trailX) * 0.1;
+        trailY += (mouseY - trailY) * 0.1;
+        
+        if (cursorTrail) {
+            cursorTrail.style.left = trailX + 'px';
+            cursorTrail.style.top = trailY + 'px';
+        }
+        
+        requestAnimationFrame(animateTrail);
+    }
+    
+    animateTrail();
+}
+
+// Particle System
+class ParticleSystem {
+    constructor() {
+        this.canvas = document.getElementById('particles-canvas');
+        if (!this.canvas) return;
+        
+        this.ctx = this.canvas.getContext('2d');
+        this.particles = [];
+        this.mouse = { x: 0, y: 0 };
+        
+        this.resize();
+        this.init();
+        
+        window.addEventListener('resize', () => this.resize());
+        document.addEventListener('mousemove', (e) => {
+            this.mouse.x = e.clientX;
+            this.mouse.y = e.clientY;
+        });
+    }
+    
+    resize() {
+        this.canvas.width = window.innerWidth;
+        this.canvas.height = window.innerHeight;
+    }
+    
+    init() {
+        const particleCount = Math.min(50, Math.floor(window.innerWidth / 20));
+        
+        for (let i = 0; i < particleCount; i++) {
+            this.particles.push({
+                x: Math.random() * this.canvas.width,
+                y: Math.random() * this.canvas.height,
+                radius: Math.random() * 2 + 1,
+                speedX: (Math.random() - 0.5) * 0.5,
+                speedY: (Math.random() - 0.5) * 0.5,
+                opacity: Math.random() * 0.5 + 0.2
+            });
+        }
+        
+        this.animate();
+    }
+    
+    animate() {
+        this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
+        
+        this.particles.forEach((particle, index) => {
+            particle.x += particle.speedX;
+            particle.y += particle.speedY;
+            
+            if (particle.x < 0 || particle.x > this.canvas.width) particle.speedX *= -1;
+            if (particle.y < 0 || particle.y > this.canvas.height) particle.speedY *= -1;
+            
+            const dx = this.mouse.x - particle.x;
+            const dy = this.mouse.y - particle.y;
+            const distance = Math.sqrt(dx * dx + dy * dy);
+            
+            if (distance < 100) {
+                const force = (100 - distance) / 100;
+                particle.x -= (dx / distance) * force * 0.5;
+                particle.y -= (dy / distance) * force * 0.5;
+            }
+            
+            this.ctx.beginPath();
+            this.ctx.arc(particle.x, particle.y, particle.radius, 0, Math.PI * 2);
+            this.ctx.fillStyle = `rgba(255, 255, 255, ${particle.opacity})`;
+            this.ctx.fill();
+            
+            if (index < this.particles.length - 1) {
+                const nextParticle = this.particles[index + 1];
+                const dx2 = nextParticle.x - particle.x;
+                const dy2 = nextParticle.y - particle.y;
+                const distance2 = Math.sqrt(dx2 * dx2 + dy2 * dy2);
+                
+                if (distance2 < 100) {
+                    this.ctx.beginPath();
+                    this.ctx.moveTo(particle.x, particle.y);
+                    this.ctx.lineTo(nextParticle.x, nextParticle.y);
+                    this.ctx.strokeStyle = `rgba(255, 255, 255, ${0.1 * (1 - distance2 / 100)})`;
+                    this.ctx.lineWidth = 1;
+                    this.ctx.stroke();
+                }
+            }
+        });
+        
+        requestAnimationFrame(() => this.animate());
+    }
+}
+
+// Planet Modal System
+const planetInfo = {
+    Mercury: "The smallest planet in our solar system and the closest to the Sun. It completes an orbit in just 88 Earth days!",
+    Venus: "The hottest planet in our solar system, with surface temperatures hot enough to melt lead. It rotates backwards!",
+    Earth: "Our home planet, the only known celestial body to harbor life. It's the third planet from the Sun.",
+    Mars: "Known as the Red Planet due to iron oxide on its surface. It has the largest volcano in the solar system!",
+    Jupiter: "The largest planet in our solar system. It's a gas giant with a Great Red Spot, a storm larger than Earth!",
+    Saturn: "Famous for its beautiful ring system. It's less dense than water and would float if placed in a giant bathtub!"
+};
+
+function initPlanetModal() {
+    const planets = document.querySelectorAll('.clickable-planet');
+    const modal = document.getElementById('planet-modal');
+    const closeModal = document.getElementById('close-modal');
+    const planetName = document.getElementById('planet-name');
+    const planetInfoText = document.getElementById('planet-info');
+    
+    if (!modal) return;
+    
+    planets.forEach(planet => {
+        planet.addEventListener('click', (e) => {
+            e.stopPropagation();
+            const planetNameValue = planet.getAttribute('data-planet');
+            planetName.textContent = planetNameValue;
+            planetInfoText.textContent = planetInfo[planetNameValue] || "Click on planets to learn more!";
+            modal.classList.remove('hidden');
+            
+            createParticleBurst(e.clientX, e.clientY);
+        });
+    });
+    
+    closeModal.addEventListener('click', () => {
+        modal.classList.add('hidden');
+    });
+    
+    modal.addEventListener('click', (e) => {
+        if (e.target === modal) {
+            modal.classList.add('hidden');
+        }
+    });
+}
+
+// Particle Burst Effect
+function createParticleBurst(x, y) {
+    const burst = document.createElement('div');
+    burst.style.position = 'fixed';
+    burst.style.left = x + 'px';
+    burst.style.top = y + 'px';
+    burst.style.width = '4px';
+    burst.style.height = '4px';
+    burst.style.background = 'white';
+    burst.style.borderRadius = '50%';
+    burst.style.pointerEvents = 'none';
+    burst.style.zIndex = '10001';
+    document.body.appendChild(burst);
+    
+    const particles = 20;
+    for (let i = 0; i < particles; i++) {
+        setTimeout(() => {
+            const particle = burst.cloneNode();
+            const angle = (Math.PI * 2 * i) / particles;
+            const velocity = 50 + Math.random() * 50;
+            const vx = Math.cos(angle) * velocity;
+            const vy = Math.sin(angle) * velocity;
+            
+            let px = x;
+            let py = y;
+            let opacity = 1;
+            
+            const animate = () => {
+                px += vx * 0.1;
+                py += vy * 0.1;
+                opacity -= 0.02;
+                
+                particle.style.left = px + 'px';
+                particle.style.top = py + 'px';
+                particle.style.opacity = opacity;
+                
+                if (opacity > 0) {
+                    requestAnimationFrame(animate);
+                } else {
+                    particle.remove();
+                }
+            };
+            
+            document.body.appendChild(particle);
+            animate();
+        }, i * 10);
+    }
+    
+    setTimeout(() => burst.remove(), 1000);
+}
+
+// Interactive Sun
+function initInteractiveSun() {
+    const sun = document.getElementById('sun');
+    if (!sun) return;
+    
+    sun.addEventListener('click', (e) => {
+        createParticleBurst(e.clientX, e.clientY);
+        
+        const planets = document.querySelectorAll('.planet');
+        planets.forEach((planet, index) => {
+            setTimeout(() => {
+                planet.style.transform = 'translateX(-50%) scale(1.3)';
+                setTimeout(() => {
+                    planet.style.transform = '';
+                }, 300);
+            }, index * 50);
+        });
+    });
+}
+
+// Profile Image Interaction
+function initProfileImage() {
+    const profileImage = document.getElementById('profile-image');
+    if (!profileImage) return;
+    
+    let clickCount = 0;
+    
+    profileImage.addEventListener('click', (e) => {
+        clickCount++;
+        createParticleBurst(e.clientX, e.clientY);
+        
+        if (clickCount >= 5) {
+            const title = document.getElementById('main-title');
+            const messages = [
+                "Welcome to my digital space",
+                "Explore the cosmos",
+                "Click planets to learn!",
+                "Try the speed toggle!",
+                "Enjoy the journey!"
+            ];
+            const randomMessage = messages[Math.floor(Math.random() * messages.length)];
+            title.textContent = randomMessage;
+            clickCount = 0;
+        }
+    });
+}
+
+// Speed Toggle
+let currentSpeed = 'normal';
+const speedStates = ['normal', 'fast', 'slow'];
+
+function initSpeedToggle() {
+    const speedToggle = document.getElementById('speed-toggle');
+    const speedText = document.getElementById('speed-text');
+    
+    if (!speedToggle || !speedText) return;
+    
+    speedToggle.addEventListener('click', () => {
+        const currentIndex = speedStates.indexOf(currentSpeed);
+        const nextIndex = (currentIndex + 1) % speedStates.length;
+        currentSpeed = speedStates[nextIndex];
+        
+        document.body.classList.remove('speed-fast', 'speed-slow');
+        
+        switch(currentSpeed) {
+            case 'fast':
+                document.body.classList.add('speed-fast');
+                speedText.textContent = 'Fast Speed';
+                break;
+            case 'slow':
+                document.body.classList.add('speed-slow');
+                speedText.textContent = 'Slow Speed';
+                break;
+            default:
+                speedText.textContent = 'Normal Speed';
+        }
+    });
+}
+
+// Enhanced Link Cards
+function initLinkCards() {
+    const linkCards = document.querySelectorAll('.link-card');
+    
+    linkCards.forEach((card, index) => {
+        card.style.animationDelay = `${index * 0.1}s`;
+        
+        card.addEventListener('mouseenter', function() {
+            this.style.transform = 'translateY(-8px) scale(1.02)';
+        });
+        
+        card.addEventListener('mouseleave', function() {
+            this.style.transform = '';
+        });
+        
         card.addEventListener('click', function(e) {
             const title = this.querySelector('.link-card-title').textContent;
             console.log(`Clicked on: ${title}`);
+            
+            createParticleBurst(e.clientX, e.clientY);
         });
     });
+}
 
-    // Smooth scroll behavior (if you add sections later)
+// Smooth scroll behavior
+function initSmoothScroll() {
     document.querySelectorAll('a[href^="#"]').forEach(anchor => {
         anchor.addEventListener('click', function(e) {
             const href = this.getAttribute('href');
@@ -113,6 +410,22 @@ document.addEventListener('DOMContentLoaded', function() {
             }
         });
     });
+}
+
+// Initialize everything when DOM is ready
+document.addEventListener('DOMContentLoaded', function() {
+    updateVisitorCount();
+    initCursorTrail();
+    new ParticleSystem();
+    initPlanetModal();
+    initInteractiveSun();
+    initProfileImage();
+    initSpeedToggle();
+    initLinkCards();
+    initSmoothScroll();
+    
+    console.log('🚀 Interactive space landing page initialized!');
+    console.log('💡 Try clicking on planets, the sun, or your profile image!');
 });
 
 // Optional: Add a function to dynamically create link cards via JavaScript
@@ -124,12 +437,13 @@ function addLinkCard(title, description, url, icon) {
     card.href = url;
     card.target = '_blank';
     card.rel = 'noopener noreferrer';
-    card.className = 'link-card group block p-6 bg-white rounded-2xl shadow-lg hover:shadow-2xl transform hover:-translate-y-2 transition-all duration-300 hover:bg-gradient-to-r hover:from-indigo-50 hover:to-purple-50';
+    card.className = 'link-card group block p-6 bg-white rounded-2xl shadow-lg hover:shadow-2xl transform transition-all duration-300 hover:bg-gradient-to-r hover:from-indigo-50 hover:to-purple-50 relative overflow-hidden';
     
     card.innerHTML = `
-        <div class="flex items-start space-x-4">
+        <div class="link-card-bg"></div>
+        <div class="flex items-start space-x-4 relative z-10">
             <div class="flex-shrink-0">
-                <div class="icon-wrapper w-12 h-12 bg-indigo-100 rounded-xl flex items-center justify-center text-indigo-600">
+                <div class="icon-wrapper w-12 h-12 bg-indigo-100 rounded-xl flex items-center justify-center text-indigo-600 group-hover:rotate-12 transition-transform">
                     ${icon}
                 </div>
             </div>
@@ -142,12 +456,14 @@ function addLinkCard(title, description, url, icon) {
                 </p>
             </div>
             <div class="flex-shrink-0">
-                <svg class="arrow-icon w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <svg class="arrow-icon w-5 h-5 text-gray-400 group-hover:translate-x-2 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
                 </svg>
             </div>
         </div>
+        <div class="link-card-shine"></div>
     `;
     
     container.appendChild(card);
+    initLinkCards();
 }
