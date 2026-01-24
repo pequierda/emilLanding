@@ -445,31 +445,42 @@ function initSpeedToggle() {
     });
 }
 
-// Enhanced Link Cards
+// Enhanced Planet Links
 function initLinkCards() {
-    const linkCards = document.querySelectorAll('.link-card');
+    const planetLinks = document.querySelectorAll('.planet-link');
     
-    linkCards.forEach((card, index) => {
-        card.style.animationDelay = `${index * 0.1}s`;
-        
-        if (!isTouchDevice()) {
-            card.addEventListener('mouseenter', function() {
-                this.style.transform = 'translateY(-8px) scale(1.02)';
-            });
-            
-            card.addEventListener('mouseleave', function() {
-                this.style.transform = '';
-            });
+    planetLinks.forEach((link, index) => {
+        const sphere = link.querySelector('.planet-sphere');
+        if (sphere) {
+            sphere.style.animationDelay = `${index * 0.5}s`;
         }
         
-        card.addEventListener('click', function(e) {
-            const title = this.querySelector('.link-card-title').textContent;
+        link.addEventListener('click', function(e) {
+            const title = this.querySelector('.planet-title')?.textContent || 'Planet';
             console.log(`Clicked on: ${title}`);
             
-            const x = e.clientX || (e.touches && e.touches[0] ? e.touches[0].clientX : window.innerWidth / 2);
-            const y = e.clientY || (e.touches && e.touches[0] ? e.touches[0].clientY : window.innerHeight / 2);
+            const rect = this.getBoundingClientRect();
+            const x = rect.left + rect.width / 2;
+            const y = rect.top + rect.height / 2;
             createParticleBurst(x, y);
         });
+        
+        // Add hover sound effect (optional - can be removed if not needed)
+        if (!isTouchDevice()) {
+            link.addEventListener('mouseenter', function() {
+                const sphere = this.querySelector('.planet-sphere');
+                if (sphere) {
+                    sphere.style.animationDuration = '5s';
+                }
+            });
+            
+            link.addEventListener('mouseleave', function() {
+                const sphere = this.querySelector('.planet-sphere');
+                if (sphere) {
+                    sphere.style.animationDuration = '20s';
+                }
+            });
+        }
     });
 }
 
