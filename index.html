@@ -3,11 +3,15 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="description" content="Welcome to my digital space">
+    <meta name="keywords" content="portfolio, links, projects, digital space">
+    <meta name="author" content="">
     <meta name="theme-color" content="#090A0F">
     <meta name="mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="format-detection" content="telephone=no">
     <title>Links</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/flowbite/2.2.0/flowbite.min.css" rel="stylesheet" />
@@ -73,13 +77,13 @@
     <canvas id="particles-canvas"></canvas>
     
     <!-- Planet Info Modal -->
-    <div id="planet-modal" class="planet-modal hidden">
+    <dialog id="planet-modal" class="planet-modal hidden" aria-labelledby="planet-name" aria-modal="true">
         <div class="planet-modal-content">
-            <button id="close-modal" class="close-modal">&times;</button>
+            <button type="button" id="close-modal" class="close-modal" aria-label="Close modal">&times;</button>
             <h2 id="planet-name" class="text-3xl font-bold text-white mb-4"></h2>
             <p id="planet-info" class="text-white/80"></p>
         </div>
-    </div>
+    </dialog>
     
     <!-- Visitor Counter -->
     <div class="fixed top-4 left-4 z-50 animate-fade-in" style="display: none;">
@@ -95,17 +99,20 @@
     </div>
 
     <!-- Main Content -->
-    <div class="container mx-auto px-4 py-12 relative z-10">
+    <main class="container mx-auto px-4 py-12 relative z-10">
         <div class="max-w-4xl mx-auto w-full">
             
             <!-- Profile Section - Enhanced -->
-            <div class="text-center mb-12 animate-fade-in">
+            <header class="text-center mb-12 animate-fade-in">
                 <div class="mb-6 inline-block relative group">
                     <div class="profile-glow"></div>
                     <img src="me.png" 
                          alt="Profile" 
                          class="profile-image w-32 h-32 rounded-full mx-auto shadow-2xl border-4 border-white relative z-10 cursor-pointer"
-                         id="profile-image">
+                         id="profile-image"
+                         width="128"
+                         height="128"
+                         loading="eager">
                     <div class="profile-ripple"></div>
                 </div>
                 <h1 class="text-5xl font-bold text-white mb-4 drop-shadow-lg typing-effect" id="main-title">
@@ -114,15 +121,15 @@
                 <p class="text-xl text-white/90 drop-shadow pulse-text">
                     Explore the cosmos of my projects
                 </p>
-                <div class="mt-6 flex justify-center gap-4">
-                    <button class="theme-toggle-btn px-6 py-2 bg-white/10 backdrop-blur-md rounded-full text-white border border-white/20 hover:bg-white/20 transition-all" id="speed-toggle">
+                <nav class="mt-6 flex justify-center gap-4" aria-label="Speed controls">
+                    <button type="button" class="theme-toggle-btn px-6 py-2 bg-white/10 backdrop-blur-md rounded-full text-white border border-white/20 hover:bg-white/20 transition-all" id="speed-toggle" aria-label="Toggle animation speed">
                         <span id="speed-text">Normal Speed</span>
                     </button>
-                </div>
-            </div>
+                </nav>
+            </header>
 
             <!-- Links Grid - Enhanced with 3D effects -->
-            <div class="links-grid grid grid-cols-1 sm:grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6 mb-8">
+            <section class="links-grid grid grid-cols-1 sm:grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6 mb-8" aria-label="Project links">
                 <a href="https://emilprotfolio.vercel.app" 
                    target="_blank"
                    rel="noopener noreferrer"
@@ -290,14 +297,14 @@
                     </div>
                     <div class="link-card-shine"></div>
                 </a>
-            </div>
+            </section>
 
             <!-- Footer -->
-            <div class="text-center text-white/80 text-sm">
+            <footer class="text-center text-white/80 text-sm">
                 <p>&copy; <span id="year"></span>. All rights reserved.</p>
-            </div>
+            </footer>
         </div>
-    </div>
+    </main>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/flowbite/2.2.0/flowbite.min.js"></script>
     <script src="script.js"></script>

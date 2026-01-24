@@ -1,3 +1,62 @@
+/* CSS Normalize/Reset */
+*, *::before, *::after {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+html {
+    -webkit-text-size-adjust: 100%;
+    -moz-text-size-adjust: 100%;
+    text-size-adjust: 100%;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    scroll-behavior: smooth;
+}
+
+body {
+    margin: 0;
+    padding: 0;
+    min-height: 100vh;
+    width: 100%;
+    overflow-x: hidden;
+    -webkit-overflow-scrolling: touch;
+}
+
+img, picture, video, canvas, svg {
+    display: block;
+    max-width: 100%;
+    height: auto;
+}
+
+input, button, textarea, select {
+    font: inherit;
+}
+
+button {
+    cursor: pointer;
+    border: none;
+    background: none;
+}
+
+a {
+    text-decoration: none;
+    color: inherit;
+}
+
+ul, ol {
+    list-style: none;
+}
+
+h1, h2, h3, h4, h5, h6 {
+    font-weight: inherit;
+    font-size: inherit;
+}
+
+p, h1, h2, h3, h4, h5, h6 {
+    overflow-wrap: break-word;
+}
+
 /* Galaxy Background */
 .galaxy-background {
     background: radial-gradient(ellipse at bottom, #1B2735 0%, #090A0F 100%);
@@ -5,15 +64,52 @@
     font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
     min-height: 100vh;
     width: 100%;
+    font-size: 16px;
+    line-height: 1.5;
+}
+
+/* Responsive Typography */
+html {
+    font-size: 16px;
+}
+
+@media (max-width: 640px) {
+    html {
+        font-size: 14px;
+    }
+}
+
+@media (min-width: 1920px) {
+    html {
+        font-size: 18px;
+    }
+}
+
+/* Container Normalization */
+.container {
+    width: 100%;
+    margin-left: auto;
+    margin-right: auto;
+    padding-left: 1rem;
+    padding-right: 1rem;
+}
+
+@media (min-width: 640px) {
+    .container {
+        padding-left: 1.5rem;
+        padding-right: 1.5rem;
+    }
+}
+
+@media (min-width: 1024px) {
+    .container {
+        padding-left: 2rem;
+        padding-right: 2rem;
+    }
 }
 
 /* Mobile Responsiveness */
 @media (max-width: 640px) {
-    .container {
-        padding-left: 1rem;
-        padding-right: 1rem;
-    }
-    
     .link-card {
         margin-bottom: 0.5rem;
     }
@@ -525,7 +621,13 @@ body:hover #cursor-trail {
     color: #5C6BC0;
 }
 
-/* Responsive Design */
+/* Responsive Design - Breakpoints */
+/* 
+   Mobile: 0-640px (default)
+   Tablet: 641px-1024px
+   Desktop: 1025px-1440px
+   Large Desktop: 1441px+
+*/
 
 /* Mobile Devices (up to 640px) */
 @media (max-width: 640px) {
@@ -680,6 +782,27 @@ body:hover #cursor-trail {
     }
 }
 
+/* Small Tablets and Large Phones (481px to 640px) */
+@media (min-width: 481px) and (max-width: 640px) {
+    .container {
+        padding-left: 1.25rem;
+        padding-right: 1.25rem;
+    }
+    
+    .link-card {
+        padding: 1.25rem !important;
+    }
+    
+    .profile-image {
+        width: 7rem !important;
+        height: 7rem !important;
+    }
+    
+    #main-title {
+        font-size: 2rem !important;
+    }
+}
+
 /* Tablet Devices (641px to 1024px) */
 @media (min-width: 641px) and (max-width: 1024px) {
     /* Sun - medium size for tablets */
@@ -729,8 +852,27 @@ body:hover #cursor-trail {
     }
 }
 
+/* Medium Desktops (1025px to 1439px) */
+@media (min-width: 1025px) and (max-width: 1439px) {
+    .container {
+        max-width: 1200px;
+        padding-left: 2rem;
+        padding-right: 2rem;
+    }
+    
+    .links-grid {
+        gap: 1.5rem;
+    }
+}
+
 /* Large Desktops (1440px and up) */
 @media (min-width: 1440px) {
+    .container {
+        max-width: 1400px;
+        padding-left: 3rem;
+        padding-right: 3rem;
+    }
+    
     /* Larger orbits for big screens */
     .orbit-1 { width: 220px; height: 220px; }
     .orbit-2 { width: 300px; height: 300px; }
@@ -746,6 +888,17 @@ body:hover #cursor-trail {
     
     .sun-core {
         font-size: 100px;
+    }
+    
+    .links-grid {
+        gap: 2rem;
+    }
+}
+
+/* Extra Large Desktops (1920px and up) */
+@media (min-width: 1920px) {
+    .container {
+        max-width: 1600px;
     }
 }
 
@@ -791,8 +944,18 @@ body:hover #cursor-trail {
     }
 }
 
+/* Dialog/Modal Normalization */
+dialog {
+    padding: 0;
+    border: none;
+    background: transparent;
+}
 
-/* Planet Modal */
+dialog::backdrop {
+    background: rgba(0, 0, 0, 0.8);
+    backdrop-filter: blur(10px);
+}
+
 .planet-modal {
     position: fixed;
     top: 0;
@@ -970,7 +1133,7 @@ body:hover #cursor-trail {
     animation-duration: calc(var(--base-duration) * 2) !important;
 }
 
-/* Reduce animations on devices that prefer reduced motion */
+/* Accessibility - Reduced Motion */
 @media (prefers-reduced-motion: reduce) {
     *,
     *::before,
@@ -978,6 +1141,7 @@ body:hover #cursor-trail {
         animation-duration: 0.01ms !important;
         animation-iteration-count: 1 !important;
         transition-duration: 0.01ms !important;
+        scroll-behavior: auto !important;
     }
     
     #cursor-trail {
@@ -985,13 +1149,50 @@ body:hover #cursor-trail {
     }
 }
 
+/* High Contrast Mode Support */
+@media (prefers-contrast: high) {
+    .link-card {
+        border: 2px solid currentColor;
+    }
+    
+    .planet-modal-content {
+        border: 2px solid white;
+    }
+}
+
+/* Print Styles */
+@media print {
+    .stars-container,
+    .solar-system,
+    .asteroids,
+    .shooting-stars,
+    #particles-canvas,
+    #cursor-trail,
+    .sun,
+    #visitor-counter {
+        display: none !important;
+    }
+    
+    body {
+        background: white;
+        color: black;
+    }
+    
+    .link-card {
+        break-inside: avoid;
+        page-break-inside: avoid;
+    }
+}
+
 /* Additional mobile optimizations */
 @media (max-width: 640px) {
     /* Prevent horizontal scroll */
-    body {
+    html, body {
         overflow-x: hidden;
         position: relative;
         -webkit-overflow-scrolling: touch;
+        width: 100%;
+        max-width: 100%;
     }
     
     /* Better touch targets */
