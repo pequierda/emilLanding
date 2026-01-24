@@ -82,7 +82,12 @@ async function updateVisitorCount() {
     }
 }
 
-// Interactive Cursor Trail
+// Check if device is touch-enabled
+function isTouchDevice() {
+    return 'ontouchstart' in window || navigator.maxTouchPoints > 0 || navigator.msMaxTouchPoints > 0;
+}
+
+// Interactive Cursor Trail (desktop only)
 let cursorTrail = null;
 let mouseX = 0;
 let mouseY = 0;
@@ -90,6 +95,12 @@ let trailX = 0;
 let trailY = 0;
 
 function initCursorTrail() {
+    if (isTouchDevice()) {
+        const trail = document.getElementById('cursor-trail');
+        if (trail) trail.style.display = 'none';
+        return;
+    }
+    
     cursorTrail = document.getElementById('cursor-trail');
     if (!cursorTrail) return;
 
@@ -122,33 +133,53 @@ class ParticleSystem {
         this.ctx = this.canvas.getContext('2d');
         this.particles = [];
         this.mouse = { x: 0, y: 0 };
+        this.isMobile = isTouchDevice();
         
         this.resize();
         this.init();
         
-        window.addEventListener('resize', () => this.resize());
-        document.addEventListener('mousemove', (e) => {
-            this.mouse.x = e.clientX;
-            this.mouse.y = e.clientY;
+        let resizeTimeout;
+        window.addEventListener('resize', () => {
+            clearTimeout(resizeTimeout);
+            resizeTimeout = setTimeout(() => this.resize(), 250);
         });
+        
+        if (this.isMobile) {
+            document.addEventListener('touchmove', (e) => {
+                if (e.touches.length > 0) {
+                    this.mouse.x = e.touches[0].clientX;
+                    this.mouse.y = e.touches[0].clientY;
+                }
+            }, { passive: true });
+        } else {
+            document.addEventListener('mousemove', (e) => {
+                this.mouse.x = e.clientX;
+                this.mouse.y = e.clientY;
+            });
+        }
     }
     
     resize() {
         this.canvas.width = window.innerWidth;
         this.canvas.height = window.innerHeight;
+        this.particles.forEach(particle => {
+            if (particle.x > this.canvas.width) particle.x = this.canvas.width;
+            if (particle.y > this.canvas.height) particle.y = this.canvas.height;
+        });
     }
     
     init() {
-        const particleCount = Math.min(50, Math.floor(window.innerWidth / 20));
+        const baseCount = this.isMobile ? 20 : 50;
+        const particleCount = Math.min(baseCount, Math.floor(window.innerWidth / (this.isMobile ? 30 : 20)));
         
         for (let i = 0; i < particleCount; i++) {
             this.particles.push({
                 x: Math.random() * this.canvas.width,
                 y: Math.random() * this.canvas.height,
-                radius: Math.random() * 2 + 1,
-                speedX: (Math.random() - 0.5) * 0.5,
-                speedY: (Math.random() - 0.5) * 0.5,
-                opacity: Math.random() * 0.5 + 0.2
+                radius: this.isMobile ? (Math.random() * 1 + 0.5) : (Math.random() * 2 + 1),
+                speedX: (Math.random() - 0.5) * (this.isMobile ? 0.3 : 0.5),
+                speedY: (Math.random() - 0.5) * (this.isMobile ? 0.3 : 0.5),
+                opacity: this.isMobile ? (Math.random() * 0.3 + 0.1) : (Math.random() * 0.5 + 0.2)
             });
         }
         
@@ -169,10 +200,11 @@ class ParticleSystem {
             const dy = this.mouse.y - particle.y;
             const distance = Math.sqrt(dx * dx + dy * dy);
             
-            if (distance < 100) {
-                const force = (100 - distance) / 100;
-                particle.x -= (dx / distance) * force * 0.5;
-                particle.y -= (dy / distance) * force * 0.5;
+            const interactionDistance = this.isMobile ? 80 : 100;
+            if (distance < interactionDistance) {
+                const force = (interactionDistance - distance) / interactionDistance;
+                particle.x -= (dx / distance) * force * (this.isMobile ? 0.3 : 0.5);
+                particle.y -= (dy / distance) * force * (this.isMobile ? 0.3 : 0.5);
             }
             
             this.ctx.beginPath();
@@ -185,13 +217,15 @@ class ParticleSystem {
                 const dx2 = nextParticle.x - particle.x;
                 const dy2 = nextParticle.y - particle.y;
                 const distance2 = Math.sqrt(dx2 * dx2 + dy2 * dy2);
+                const connectionDistance = this.isMobile ? 80 : 100;
                 
-                if (distance2 < 100) {
+                if (distance2 < connectionDistance) {
                     this.ctx.beginPath();
                     this.ctx.moveTo(particle.x, particle.y);
                     this.ctx.lineTo(nextParticle.x, nextParticle.y);
-                    this.ctx.strokeStyle = `rgba(255, 255, 255, ${0.1 * (1 - distance2 / 100)})`;
-                    this.ctx.lineWidth = 1;
+                    const opacity = this.isMobile ? 0.05 : 0.1;
+                    this.ctx.strokeStyle = `rgba(255, 255, 255, ${opacity * (1 - distance2 / connectionDistance)})`;
+                    this.ctx.lineWidth = this.isMobile ? 0.5 : 1;
                     this.ctx.stroke();
                 }
             }
@@ -221,24 +255,41 @@ function initPlanetModal() {
     if (!modal) return;
     
     planets.forEach(planet => {
-        planet.addEventListener('click', (e) => {
+        const handleClick = (e) => {
             e.stopPropagation();
+            e.preventDefault();
             const planetNameValue = planet.getAttribute('data-planet');
             planetName.textContent = planetNameValue;
-            planetInfoText.textContent = planetInfo[planetNameValue] || "Click on planets to learn more!";
+            planetInfoText.textContent = planetInfo[planetNameValue] || "Tap on planets to learn more!";
             modal.classList.remove('hidden');
+            document.body.style.overflow = 'hidden'; // Prevent background scroll
             
-            createParticleBurst(e.clientX, e.clientY);
-        });
+            const x = e.clientX || (e.touches && e.touches[0] ? e.touches[0].clientX : window.innerWidth / 2);
+            const y = e.clientY || (e.touches && e.touches[0] ? e.touches[0].clientY : window.innerHeight / 2);
+            createParticleBurst(x, y);
+        };
+        
+        planet.addEventListener('click', handleClick);
+        planet.addEventListener('touchend', handleClick, { passive: false });
     });
     
-    closeModal.addEventListener('click', () => {
+    const closeModalHandler = () => {
         modal.classList.add('hidden');
-    });
+        document.body.style.overflow = '';
+    };
+    
+    closeModal.addEventListener('click', closeModalHandler);
+    closeModal.addEventListener('touchend', closeModalHandler);
     
     modal.addEventListener('click', (e) => {
         if (e.target === modal) {
-            modal.classList.add('hidden');
+            closeModalHandler();
+        }
+    });
+    
+    modal.addEventListener('touchend', (e) => {
+        if (e.target === modal) {
+            closeModalHandler();
         }
     });
 }
@@ -299,8 +350,11 @@ function initInteractiveSun() {
     const sun = document.getElementById('sun');
     if (!sun) return;
     
-    sun.addEventListener('click', (e) => {
-        createParticleBurst(e.clientX, e.clientY);
+    const handleSunClick = (e) => {
+        e.stopPropagation();
+        const x = e.clientX || (e.touches && e.touches[0] ? e.touches[0].clientX : window.innerWidth / 2);
+        const y = e.clientY || (e.touches && e.touches[0] ? e.touches[0].clientY : window.innerHeight / 2);
+        createParticleBurst(x, y);
         
         const planets = document.querySelectorAll('.planet');
         planets.forEach((planet, index) => {
@@ -311,7 +365,10 @@ function initInteractiveSun() {
                 }, 300);
             }, index * 50);
         });
-    });
+    };
+    
+    sun.addEventListener('click', handleSunClick);
+    sun.addEventListener('touchend', handleSunClick, { passive: false });
 }
 
 // Profile Image Interaction
@@ -320,17 +377,29 @@ function initProfileImage() {
     if (!profileImage) return;
     
     let clickCount = 0;
+    let lastClickTime = 0;
     
-    profileImage.addEventListener('click', (e) => {
+    const handleProfileClick = (e) => {
+        e.stopPropagation();
+        const currentTime = Date.now();
+        
+        if (currentTime - lastClickTime > 1000) {
+            clickCount = 0;
+        }
+        
         clickCount++;
-        createParticleBurst(e.clientX, e.clientY);
+        lastClickTime = currentTime;
+        
+        const x = e.clientX || (e.touches && e.touches[0] ? e.touches[0].clientX : window.innerWidth / 2);
+        const y = e.clientY || (e.touches && e.touches[0] ? e.touches[0].clientY : window.innerHeight / 2);
+        createParticleBurst(x, y);
         
         if (clickCount >= 5) {
             const title = document.getElementById('main-title');
             const messages = [
                 "Welcome to my digital space",
                 "Explore the cosmos",
-                "Click planets to learn!",
+                isTouchDevice() ? "Tap planets to learn!" : "Click planets to learn!",
                 "Try the speed toggle!",
                 "Enjoy the journey!"
             ];
@@ -338,7 +407,10 @@ function initProfileImage() {
             title.textContent = randomMessage;
             clickCount = 0;
         }
-    });
+    };
+    
+    profileImage.addEventListener('click', handleProfileClick);
+    profileImage.addEventListener('touchend', handleProfileClick, { passive: false });
 }
 
 // Speed Toggle
@@ -380,19 +452,23 @@ function initLinkCards() {
     linkCards.forEach((card, index) => {
         card.style.animationDelay = `${index * 0.1}s`;
         
-        card.addEventListener('mouseenter', function() {
-            this.style.transform = 'translateY(-8px) scale(1.02)';
-        });
-        
-        card.addEventListener('mouseleave', function() {
-            this.style.transform = '';
-        });
+        if (!isTouchDevice()) {
+            card.addEventListener('mouseenter', function() {
+                this.style.transform = 'translateY(-8px) scale(1.02)';
+            });
+            
+            card.addEventListener('mouseleave', function() {
+                this.style.transform = '';
+            });
+        }
         
         card.addEventListener('click', function(e) {
             const title = this.querySelector('.link-card-title').textContent;
             console.log(`Clicked on: ${title}`);
             
-            createParticleBurst(e.clientX, e.clientY);
+            const x = e.clientX || (e.touches && e.touches[0] ? e.touches[0].clientX : window.innerWidth / 2);
+            const y = e.clientY || (e.touches && e.touches[0] ? e.touches[0].clientY : window.innerHeight / 2);
+            createParticleBurst(x, y);
         });
     });
 }
@@ -424,8 +500,21 @@ document.addEventListener('DOMContentLoaded', function() {
     initLinkCards();
     initSmoothScroll();
     
+    // Prevent double-tap zoom on iOS
+    let lastTouchEnd = 0;
+    document.addEventListener('touchend', function(event) {
+        const now = Date.now();
+        if (now - lastTouchEnd <= 300) {
+            event.preventDefault();
+        }
+        lastTouchEnd = now;
+    }, false);
+    
     console.log('🚀 Interactive space landing page initialized!');
     console.log('💡 Try clicking on planets, the sun, or your profile image!');
+    if (isTouchDevice()) {
+        console.log('📱 Mobile mode: Touch interactions enabled');
+    }
 });
 
 // Optional: Add a function to dynamically create link cards via JavaScript
@@ -467,3 +556,4 @@ function addLinkCard(title, description, url, icon) {
     container.appendChild(card);
     initLinkCards();
 }
+
