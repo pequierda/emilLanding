@@ -1,3 +1,179 @@
+// Project data
+const projects = [
+    {
+        title: 'Portfolio',
+        description: 'My full portfolio showcasing personal projects, skills, and experience.',
+        url: 'https://emilprotfolio.vercel.app',
+        category: 'app',
+        featured: true,
+        badge: 'Featured',
+        glow: 'rgba(99, 102, 241, 0.4)',
+        icon: '<svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 13.255A23.931 23.931 0 0112 15c-3.183 0-6.22-.62-9-1.745M16 6V4a2 2 0 00-2-2h-4a2 2 0 00-2 2v2m4 6h.01M5 20h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path></svg>'
+    },
+    {
+        title: 'Encryptor',
+        description: 'Secure text encryption and decryption tool with a clean interface.',
+        url: 'https://encryptor-emilpro.vercel.app',
+        category: 'tool',
+        badge: 'Tool',
+        glow: 'rgba(6, 182, 212, 0.3)',
+        icon: '<svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"></path></svg>'
+    },
+    {
+        title: 'QR Generator',
+        description: 'Create custom QR codes instantly with styling options.',
+        url: 'https://emilqrgen.vercel.app',
+        category: 'tool',
+        badge: 'Tool',
+        glow: 'rgba(168, 85, 247, 0.3)',
+        icon: '<svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v1m6 11h2m-6 0h-2v4m0-11v3m0 0h.01M12 12h4.01M16 20h4M4 12h4m12 0h.01M5 8h2a1 1 0 001-1V5a1 1 0 00-1-1H5a1 1 0 00-1 1v2a1 1 0 001 1zm12 0h2a1 1 0 001-1V5a1 1 0 00-1-1h-2a1 1 0 00-1 1v2a1 1 0 001 1zM5 20h2a1 1 0 001-1v-2a1 1 0 00-1-1H5a1 1 0 00-1 1v2a1 1 0 001 1z"></path></svg>'
+    },
+    {
+        title: 'For Sale Landing Page',
+        description: 'Modern landing page template for sale with admin panel.',
+        url: 'https://forsalelandingpage.vercel.app',
+        category: 'template',
+        badge: 'Template',
+        glow: 'rgba(34, 197, 94, 0.3)',
+        icon: '<svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"></path></svg>'
+    },
+    {
+        title: 'Business Landing Page',
+        description: 'Professional business landing page template with admin panel.',
+        url: 'https://4businesspage.vercel.app/',
+        category: 'template',
+        badge: 'Template',
+        glow: 'rgba(251, 146, 60, 0.3)',
+        icon: '<svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"></path></svg>'
+    },
+    {
+        title: 'Quote Generator',
+        description: 'Generate inspirational quotes and chat with an AI assistant.',
+        url: 'https://quote-generator-swart-ten.vercel.app/',
+        category: 'app',
+        badge: 'AI App',
+        glow: 'rgba(236, 72, 153, 0.3)',
+        icon: '<svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"></path></svg>'
+    }
+];
+
+function renderProjects(filter = 'all') {
+    const container = document.querySelector('.links-grid');
+    if (!container) return;
+
+    container.innerHTML = '';
+
+    const filtered = filter === 'all'
+        ? projects
+        : projects.filter(p => p.category === filter);
+
+    filtered.forEach((project, index) => {
+        const card = document.createElement('a');
+        card.href = project.url;
+        card.target = '_blank';
+        card.rel = 'noopener noreferrer';
+        card.className = `link-card${project.featured ? ' bento-featured' : ''}`;
+        card.dataset.category = project.category;
+        card.style.animationDelay = `${index * 0.08}s`;
+
+        card.innerHTML = `
+            <div class="link-card-glow" style="background: ${project.glow}; top: -50px; right: -50px;"></div>
+            <div class="link-card-inner">
+                <div class="link-card-top">
+                    <div class="link-card-icon">${project.icon}</div>
+                    <span class="link-card-badge">${project.badge}</span>
+                </div>
+                <h3 class="link-card-title">${project.title}</h3>
+                <p class="link-card-desc">${project.description}</p>
+                <div class="link-card-footer">
+                    <span class="link-card-cta">
+                        Launch project
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"></path>
+                        </svg>
+                    </span>
+                </div>
+            </div>
+        `;
+
+        container.appendChild(card);
+    });
+}
+
+function initFilterTabs() {
+    const tabs = document.querySelectorAll('.filter-tab');
+    tabs.forEach(tab => {
+        tab.addEventListener('click', () => {
+            tabs.forEach(t => {
+                t.classList.remove('active');
+                t.setAttribute('aria-selected', 'false');
+            });
+            tab.classList.add('active');
+            tab.setAttribute('aria-selected', 'true');
+            renderProjects(tab.dataset.filter);
+        });
+    });
+}
+
+function initScrollReveal() {
+    const reveals = document.querySelectorAll('.reveal');
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                entry.target.classList.add('visible');
+            }
+        });
+    }, { threshold: 0.1, rootMargin: '0px 0px -40px 0px' });
+
+    reveals.forEach(el => observer.observe(el));
+}
+
+function initStatCounter() {
+    const statEl = document.querySelector('.stat-number[data-count]');
+    if (!statEl) return;
+
+    const target = parseInt(statEl.dataset.count, 10);
+    let started = false;
+
+    const observer = new IntersectionObserver((entries) => {
+        if (entries[0].isIntersecting && !started) {
+            started = true;
+            let current = 0;
+            const step = () => {
+                current += 1;
+                statEl.textContent = current;
+                if (current < target) requestAnimationFrame(step);
+            };
+            requestAnimationFrame(step);
+        }
+    }, { threshold: 0.5 });
+
+    observer.observe(statEl);
+}
+
+function initCursorGlow() {
+    if (isTouchDevice()) return;
+
+    const glow = document.getElementById('cursor-glow');
+    if (!glow) return;
+
+    let gx = 0, gy = 0, tx = 0, ty = 0;
+
+    document.addEventListener('mousemove', (e) => {
+        tx = e.clientX;
+        ty = e.clientY;
+    });
+
+    function animate() {
+        gx += (tx - gx) * 0.06;
+        gy += (ty - gy) * 0.06;
+        glow.style.left = gx + 'px';
+        glow.style.top = gy + 'px';
+        requestAnimationFrame(animate);
+    }
+    animate();
+}
+
 // Custom JavaScript for Landing Page
 
 // Cookie utility functions
@@ -345,17 +521,17 @@ function createParticleBurst(x, y) {
     setTimeout(() => burst.remove(), 1000);
 }
 
-// Interactive Sun
-function initInteractiveSun() {
-    const sun = document.getElementById('sun');
-    if (!sun) return;
-    
-    const handleSunClick = (e) => {
+// Interactive Center Logo
+function initInteractiveLogo() {
+    const logo = document.getElementById('center-logo');
+    if (!logo) return;
+
+    const handleLogoClick = (e) => {
         e.stopPropagation();
         const x = e.clientX || (e.touches && e.touches[0] ? e.touches[0].clientX : window.innerWidth / 2);
         const y = e.clientY || (e.touches && e.touches[0] ? e.touches[0].clientY : window.innerHeight / 2);
         createParticleBurst(x, y);
-        
+
         const planets = document.querySelectorAll('.planet');
         planets.forEach((planet, index) => {
             setTimeout(() => {
@@ -366,9 +542,9 @@ function initInteractiveSun() {
             }, index * 50);
         });
     };
-    
-    sun.addEventListener('click', handleSunClick);
-    sun.addEventListener('touchend', handleSunClick, { passive: false });
+
+    logo.addEventListener('click', handleLogoClick);
+    logo.addEventListener('touchend', handleLogoClick, { passive: false });
 }
 
 // Profile Image Interaction
@@ -395,15 +571,16 @@ function initProfileImage() {
         createParticleBurst(x, y);
         
         if (clickCount >= 5) {
-            const title = document.getElementById('main-title');
+            const gradient = document.querySelector('.hero-title-gradient');
             const messages = [
-                "Welcome to my digital space",
-                "Explore the cosmos",
-                isTouchDevice() ? "Tap planets to learn!" : "Click planets to learn!",
-                "Enjoy the journey!"
+                'digital universe',
+                'creative cosmos',
+                'code nebula',
+                'idea galaxy'
             ];
-            const randomMessage = messages[Math.floor(Math.random() * messages.length)];
-            title.textContent = randomMessage;
+            if (gradient) {
+                gradient.textContent = messages[Math.floor(Math.random() * messages.length)];
+            }
             clickCount = 0;
         }
     };
@@ -414,31 +591,36 @@ function initProfileImage() {
 
 
 // Enhanced Link Cards
+let linkCardsInitialized = false;
+
 function initLinkCards() {
-    const linkCards = document.querySelectorAll('.link-card');
-    
-    linkCards.forEach((card, index) => {
-        card.style.animationDelay = `${index * 0.1}s`;
-        
-        if (!isTouchDevice()) {
-            card.addEventListener('mouseenter', function() {
-                this.style.transform = 'translateY(-8px) scale(1.02)';
-            });
-            
-            card.addEventListener('mouseleave', function() {
-                this.style.transform = '';
-            });
-        }
-        
-        card.addEventListener('click', function(e) {
-            const title = this.querySelector('.link-card-title').textContent;
-            console.log(`Clicked on: ${title}`);
-            
-            const x = e.clientX || (e.touches && e.touches[0] ? e.touches[0].clientX : window.innerWidth / 2);
-            const y = e.clientY || (e.touches && e.touches[0] ? e.touches[0].clientY : window.innerHeight / 2);
-            createParticleBurst(x, y);
-        });
+    const container = document.querySelector('.links-grid');
+    if (!container || linkCardsInitialized) return;
+    linkCardsInitialized = true;
+
+    container.addEventListener('click', function(e) {
+        const card = e.target.closest('.link-card');
+        if (!card) return;
+
+        const title = card.querySelector('.link-card-title')?.textContent;
+        if (title) console.log(`Clicked on: ${title}`);
+
+        const x = e.clientX || window.innerWidth / 2;
+        const y = e.clientY || window.innerHeight / 2;
+        createParticleBurst(x, y);
     });
+
+    if (!isTouchDevice()) {
+        container.addEventListener('mouseenter', function(e) {
+            const card = e.target.closest('.link-card');
+            if (card) card.style.transform = 'translateY(-6px)';
+        }, true);
+
+        container.addEventListener('mouseleave', function(e) {
+            const card = e.target.closest('.link-card');
+            if (card) card.style.transform = '';
+        }, true);
+    }
 }
 
 // Smooth scroll behavior
@@ -458,14 +640,23 @@ function initSmoothScroll() {
 
 // Initialize everything when DOM is ready
 document.addEventListener('DOMContentLoaded', function() {
+    renderProjects();
+    initFilterTabs();
+    initScrollReveal();
+    initStatCounter();
+    initCursorGlow();
+    initLinkCards();
     updateVisitorCount();
     initCursorTrail();
     new ParticleSystem();
     initPlanetModal();
-    initInteractiveSun();
+    initInteractiveLogo();
     initProfileImage();
-    initLinkCards();
     initSmoothScroll();
+
+    document.querySelectorAll('.hero .reveal').forEach(el => {
+        setTimeout(() => el.classList.add('visible'), 100);
+    });
     
     // Prevent double-tap zoom on iOS
     let lastTouchEnd = 0;
@@ -478,49 +669,27 @@ document.addEventListener('DOMContentLoaded', function() {
     }, false);
     
     console.log('🚀 Interactive space landing page initialized!');
-    console.log('💡 Try clicking on planets, the sun, or your profile image!');
+    console.log('💡 Try clicking on planets, the EP logo, or your profile image!');
     if (isTouchDevice()) {
         console.log('📱 Mobile mode: Touch interactions enabled');
     }
 });
 
-// Optional: Add a function to dynamically create link cards via JavaScript
-function addLinkCard(title, description, url, icon) {
-    const container = document.querySelector('.links-grid');
-    if (!container) return;
+function addLinkCard(title, description, url, icon, category = 'app') {
+    projects.push({
+        title,
+        description,
+        url,
+        category,
+        badge: category.charAt(0).toUpperCase() + category.slice(1),
+        glow: 'rgba(99, 102, 241, 0.3)',
+        icon: icon || '<svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1"></path></svg>'
+    });
 
-    const card = document.createElement('a');
-    card.href = url;
-    card.target = '_blank';
-    card.rel = 'noopener noreferrer';
-    card.className = 'link-card group block p-6 bg-white rounded-2xl shadow-lg hover:shadow-2xl transform transition-all duration-300 hover:bg-gradient-to-r hover:from-indigo-50 hover:to-purple-50 relative overflow-hidden';
-    
-    card.innerHTML = `
-        <div class="link-card-bg"></div>
-        <div class="flex items-start space-x-4 relative z-10">
-            <div class="flex-shrink-0">
-                <div class="icon-wrapper w-12 h-12 bg-indigo-100 rounded-xl flex items-center justify-center text-indigo-600 group-hover:rotate-12 transition-transform">
-                    ${icon}
-                </div>
-            </div>
-            <div class="flex-1 min-w-0">
-                <h3 class="link-card-title text-xl font-bold text-gray-900 mb-1">
-                    ${title}
-                </h3>
-                <p class="text-gray-600 text-sm">
-                    ${description}
-                </p>
-            </div>
-            <div class="flex-shrink-0">
-                <svg class="arrow-icon w-5 h-5 text-gray-400 group-hover:translate-x-2 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
-                </svg>
-            </div>
-        </div>
-        <div class="link-card-shine"></div>
-    `;
-    
-    container.appendChild(card);
-    initLinkCards();
+    const activeFilter = document.querySelector('.filter-tab.active');
+    renderProjects(activeFilter ? activeFilter.dataset.filter : 'all');
+
+    const statEl = document.querySelector('.stat-number[data-count]');
+    if (statEl) statEl.dataset.count = projects.length;
 }
 

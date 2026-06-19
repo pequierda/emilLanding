@@ -4,79 +4,66 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="description" content="Welcome to my digital space">
-    <meta name="keywords" content="portfolio, links, projects, digital space">
-    <meta name="author" content="">
-    <meta name="theme-color" content="#090A0F">
+    <meta name="description" content="Emil's digital space — portfolio, tools, and creative projects">
+    <meta name="keywords" content="portfolio, links, projects, developer, web apps">
+    <meta name="author" content="Emil">
+    <meta name="theme-color" content="#06070d">
     <meta name="mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <meta name="format-detection" content="telephone=no">
-    <title>Links</title>
+    <title>Emil — Digital Space</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&family=Syne:wght@600;700;800&display=swap" rel="stylesheet">
     <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/flowbite/2.2.0/flowbite.min.css" rel="stylesheet" />
     <link href="styles.css" rel="stylesheet" />
 </head>
 <body class="galaxy-background min-h-screen overflow-x-hidden">
-    <!-- Interactive Cursor Trail -->
     <div id="cursor-trail"></div>
-    
-    <!-- Stars Background -->
+    <div id="cursor-glow"></div>
+
+    <div class="aurora aurora-1"></div>
+    <div class="aurora aurora-2"></div>
+    <div class="noise-overlay"></div>
+
     <div class="stars-container">
         <div class="stars"></div>
         <div class="stars2"></div>
         <div class="stars3"></div>
     </div>
-    
-    <!-- Central Sun - Interactive -->
-    <div class="sun interactive-sun" id="sun">
-        <div class="sun-core">☀️</div>
-        <div class="sun-pulse-ring"></div>
-        <div class="sun-pulse-ring delay-1"></div>
-        <div class="sun-pulse-ring delay-2"></div>
+
+    <div class="center-logo interactive-logo" id="center-logo">
+        <div class="logo-pulse-ring"></div>
+        <div class="logo-pulse-ring delay-1"></div>
+        <div class="logo-pulse-ring delay-2"></div>
+        <img src="me.png" alt="EP Logo" class="logo-core" width="96" height="96">
     </div>
-    
-    <!-- Orbiting Planets - Clickable -->
+
     <div class="solar-system">
-        <div class="orbit orbit-1">
-            <div class="planet planet-mercury clickable-planet" data-planet="Mercury"></div>
-        </div>
-        <div class="orbit orbit-2">
-            <div class="planet planet-venus clickable-planet" data-planet="Venus"></div>
-        </div>
-        <div class="orbit orbit-3">
-            <div class="planet planet-earth clickable-planet" data-planet="Earth"></div>
-        </div>
-        <div class="orbit orbit-4">
-            <div class="planet planet-mars clickable-planet" data-planet="Mars"></div>
-        </div>
-        <div class="orbit orbit-5">
-            <div class="planet planet-jupiter clickable-planet" data-planet="Jupiter"></div>
-        </div>
-        <div class="orbit orbit-6">
-            <div class="planet planet-saturn clickable-planet" data-planet="Saturn"></div>
-        </div>
+        <div class="orbit orbit-1"><div class="planet planet-mercury clickable-planet" data-planet="Mercury"></div></div>
+        <div class="orbit orbit-2"><div class="planet planet-venus clickable-planet" data-planet="Venus"></div></div>
+        <div class="orbit orbit-3"><div class="planet planet-earth clickable-planet" data-planet="Earth"></div></div>
+        <div class="orbit orbit-4"><div class="planet planet-mars clickable-planet" data-planet="Mars"></div></div>
+        <div class="orbit orbit-5"><div class="planet planet-jupiter clickable-planet" data-planet="Jupiter"></div></div>
+        <div class="orbit orbit-6"><div class="planet planet-saturn clickable-planet" data-planet="Saturn"></div></div>
     </div>
-    
-    <!-- Floating Asteroids -->
+
     <div class="asteroids">
         <div class="asteroid asteroid-1">☄️</div>
         <div class="asteroid asteroid-2">☄️</div>
         <div class="asteroid asteroid-3">☄️</div>
         <div class="asteroid asteroid-4">☄️</div>
     </div>
-    
-    <!-- Shooting Stars -->
+
     <div class="shooting-stars">
         <div class="shooting-star"></div>
         <div class="shooting-star"></div>
         <div class="shooting-star"></div>
     </div>
-    
-    <!-- Particle System -->
+
     <canvas id="particles-canvas"></canvas>
-    
-    <!-- Planet Info Modal -->
+
     <dialog id="planet-modal" class="planet-modal hidden" aria-labelledby="planet-name" aria-modal="true">
         <div class="planet-modal-content">
             <button type="button" id="close-modal" class="close-modal" aria-label="Close modal">&times;</button>
@@ -84,224 +71,141 @@
             <p id="planet-info" class="text-white/80"></p>
         </div>
     </dialog>
-    
-    <!-- Visitor Counter -->
-    <div class="fixed top-4 left-4 z-50 animate-fade-in" style="display: none;">
-        <div class="inline-flex items-center gap-2 sm:gap-3 px-4 sm:px-6 py-2 sm:py-3 bg-white/10 backdrop-blur-md rounded-full border border-white/20 shadow-lg hover:bg-white/20 transition-all cursor-pointer" id="visitor-counter">
-            <svg class="w-4 h-4 sm:w-5 sm:h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path>
-            </svg>
-            <span class="text-white font-semibold text-xs sm:text-sm">
-                <span class="visitor-count">0</span> Visitors
-            </span>
-        </div>
-    </div>
 
-    <!-- Main Content -->
-    <main class="container mx-auto px-4 py-12 relative z-10">
-        <div class="max-w-4xl mx-auto w-full">
-            
-            <!-- Profile Section - Enhanced -->
-            <header class="text-center mb-12 animate-fade-in">
-                <div class="mb-6 inline-block relative group">
-                    <div class="profile-glow"></div>
-                    <img src="me.png" 
-                         alt="Profile" 
-                         class="profile-image w-32 h-32 rounded-full mx-auto shadow-2xl border-4 border-white relative z-10 cursor-pointer"
-                         id="profile-image"
-                         width="128"
-                         height="128"
-                         loading="eager">
-                    <div class="profile-ripple"></div>
+    <nav class="site-nav" aria-label="Main navigation">
+        <a href="#" class="nav-logo">
+            <span class="nav-logo-dot"></span>
+            emil.dev
+        </a>
+        <div class="nav-links">
+            <a href="#projects" class="nav-link">Projects</a>
+            <a href="#about" class="nav-link">About</a>
+        </div>
+        <div class="nav-actions">
+            <div class="visitor-pill" id="visitor-counter" style="display: none;">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path>
+                </svg>
+                <span><span class="visitor-count">0</span> visitors</span>
+            </div>
+            <a href="https://emilprotfolio.vercel.app" target="_blank" rel="noopener noreferrer" class="nav-cta">
+                Portfolio
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"></path>
+                </svg>
+            </a>
+        </div>
+    </nav>
+
+    <main class="main-content">
+        <section class="hero" aria-labelledby="main-title">
+            <div class="hero-badge reveal">
+                <span class="hero-badge-dot"></span>
+                Open to collaborations
+            </div>
+
+            <div class="hero-profile reveal reveal-delay-1">
+                <div class="profile-ring">
+                    <img src="me.png" alt="Emil profile photo" class="profile-image" id="profile-image" width="160" height="160" loading="eager">
                 </div>
-                <h1 class="text-5xl font-bold text-white mb-4 drop-shadow-lg typing-effect" id="main-title">
-                    Welcome to my digital space
-                </h1>
-                <p class="text-xl text-white/90 drop-shadow pulse-text">
-                    Explore the cosmos of my projects
-                </p>
-            </header>
+            </div>
 
-            <!-- Links Grid - Enhanced with 3D effects -->
-            <section class="links-grid grid grid-cols-1 sm:grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6 mb-8" aria-label="Project links">
-                <a href="https://emilprotfolio.vercel.app" 
-                   target="_blank"
-                   rel="noopener noreferrer"
-                   class="link-card group block p-4 sm:p-6 bg-white rounded-2xl shadow-lg hover:shadow-2xl transform transition-all duration-300 hover:bg-gray-50 w-full relative overflow-hidden">
-                    <div class="link-card-bg"></div>
-                    <div class="flex items-start space-x-3 sm:space-x-4 relative z-10">
-                        <div class="flex-shrink-0">
-                            <div class="icon-wrapper w-12 h-12 bg-indigo-50 rounded-xl flex items-center justify-center text-indigo-600 group-hover:rotate-12 transition-transform">
-                                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 13.255A23.931 23.931 0 0112 15c-3.183 0-6.22-.62-9-1.745M16 6V4a2 2 0 00-2-2h-4a2 2 0 00-2 2v2m4 6h.01M5 20h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path></svg>
-                            </div>
-                        </div>
-                        <div class="flex-1 min-w-0">
-                            <h3 class="link-card-title text-lg sm:text-xl font-bold text-gray-900 mb-1">
-                                Portfolio
-                            </h3>
-                            <p class="text-gray-600 text-xs sm:text-sm">
-                                View my portfolio and personal projects
-                            </p>
-                        </div>
-                        <div class="flex-shrink-0">
-                            <svg class="arrow-icon w-5 h-5 text-gray-400 group-hover:translate-x-2 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
-                            </svg>
-                        </div>
-                    </div>
-                    <div class="link-card-shine"></div>
+            <h1 id="main-title" class="hero-title reveal reveal-delay-2">
+                <span class="hero-title-line">Welcome to my</span>
+                <span class="hero-title-gradient">digital universe</span>
+            </h1>
+
+            <p class="hero-subtitle reveal reveal-delay-3">
+                Developer crafting web experiences — explore my projects, tools, and experiments orbiting this space.
+            </p>
+
+            <div class="hero-actions reveal reveal-delay-4">
+                <a href="#projects" class="btn-primary">
+                    Explore projects
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 14l-7 7m0 0l-7-7m7 7V3"></path>
+                    </svg>
                 </a>
-
-                <a href="https://encryptor-emilpro.vercel.app" 
-                   target="_blank"
-                   rel="noopener noreferrer"
-                   class="link-card group block p-4 sm:p-6 bg-white rounded-2xl shadow-lg hover:shadow-2xl transform transition-all duration-300 hover:bg-gray-50 w-full relative overflow-hidden">
-                    <div class="link-card-bg"></div>
-                    <div class="flex items-start space-x-3 sm:space-x-4 relative z-10">
-                        <div class="flex-shrink-0">
-                            <div class="icon-wrapper w-12 h-12 bg-indigo-50 rounded-xl flex items-center justify-center text-indigo-600 group-hover:rotate-12 transition-transform">
-                                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"></path></svg>
-                            </div>
-                        </div>
-                        <div class="flex-1 min-w-0">
-                            <h3 class="link-card-title text-lg sm:text-xl font-bold text-gray-900 mb-1">
-                                Encryptor
-                            </h3>
-                            <p class="text-gray-600 text-xs sm:text-sm">
-                                Secure text encryption and decryption tool
-                            </p>
-                        </div>
-                        <div class="flex-shrink-0">
-                            <svg class="arrow-icon w-5 h-5 text-gray-400 group-hover:translate-x-2 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
-                            </svg>
-                        </div>
-                    </div>
-                    <div class="link-card-shine"></div>
+                <a href="https://emilprotfolio.vercel.app" target="_blank" rel="noopener noreferrer" class="btn-secondary">
+                    View portfolio
                 </a>
+            </div>
 
-                <a href="https://emilqrgen.vercel.app" 
-                   target="_blank"
-                   rel="noopener noreferrer"
-                   class="link-card group block p-4 sm:p-6 bg-white rounded-2xl shadow-lg hover:shadow-2xl transform transition-all duration-300 hover:bg-gray-50 w-full relative overflow-hidden">
-                    <div class="link-card-bg"></div>
-                    <div class="flex items-start space-x-3 sm:space-x-4 relative z-10">
-                        <div class="flex-shrink-0">
-                            <div class="icon-wrapper w-12 h-12 bg-indigo-50 rounded-xl flex items-center justify-center text-indigo-600 group-hover:rotate-12 transition-transform">
-                                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v1m6 11h2m-6 0h-2v4m0-11v3m0 0h.01M12 12h4.01M16 20h4M4 12h4m12 0h.01M5 8h2a1 1 0 001-1V5a1 1 0 00-1-1H5a1 1 0 00-1 1v2a1 1 0 001 1zm12 0h2a1 1 0 001-1V5a1 1 0 00-1-1h-2a1 1 0 00-1 1v2a1 1 0 001 1zM5 20h2a1 1 0 001-1v-2a1 1 0 00-1-1H5a1 1 0 00-1 1v2a1 1 0 001 1z"></path></svg>
-                            </div>
-                        </div>
-                        <div class="flex-1 min-w-0">
-                            <h3 class="link-card-title text-lg sm:text-xl font-bold text-gray-900 mb-1">
-                                QR Generator
-                            </h3>
-                            <p class="text-gray-600 text-xs sm:text-sm">
-                                Create custom QR codes instantly
-                            </p>
-                        </div>
-                        <div class="flex-shrink-0">
-                            <svg class="arrow-icon w-5 h-5 text-gray-400 group-hover:translate-x-2 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
-                            </svg>
-                        </div>
+            <div class="hero-stats reveal reveal-delay-5">
+                <div class="stat-item">
+                    <span class="stat-number" data-count="6">0</span>
+                    <span class="stat-label">Live projects</span>
+                </div>
+                <div class="stat-divider"></div>
+                <div class="stat-item">
+                    <span class="stat-number">∞</span>
+                    <span class="stat-label">Ideas in orbit</span>
+                </div>
+                <div class="stat-divider"></div>
+                <div class="stat-item">
+                    <span class="stat-number">100%</span>
+                    <span class="stat-label">Passion driven</span>
+                </div>
+            </div>
+
+            <div class="scroll-hint" aria-hidden="true">
+                <span>Scroll</span>
+                <div class="scroll-hint-line"></div>
+            </div>
+        </section>
+
+        <section id="projects" class="projects-section" aria-labelledby="projects-heading">
+            <div class="section-header reveal">
+                <span class="section-tag">Projects</span>
+                <h2 id="projects-heading" class="section-title">Things I've built</h2>
+                <p class="section-desc">Hand-picked tools and apps — click any card to launch.</p>
+            </div>
+
+            <div class="filter-tabs reveal" role="tablist" aria-label="Filter projects">
+                <button class="filter-tab active" data-filter="all" role="tab" aria-selected="true">All</button>
+                <button class="filter-tab" data-filter="tool" role="tab" aria-selected="false">Tools</button>
+                <button class="filter-tab" data-filter="template" role="tab" aria-selected="false">Templates</button>
+                <button class="filter-tab" data-filter="app" role="tab" aria-selected="false">Apps</button>
+            </div>
+
+            <div class="bento-grid links-grid" aria-label="Project links"></div>
+        </section>
+
+        <section id="about" class="about-section" aria-labelledby="about-heading">
+            <div class="about-card reveal">
+                <div class="about-glow"></div>
+                <div class="about-content">
+                    <span class="section-tag">About</span>
+                    <h2 id="about-heading" class="section-title">Building in the open</h2>
+                    <p class="about-text">
+                        I design and ship modern web experiences — from encryption tools to full landing page templates.
+                        Every project here is live, interactive, and built with care. Tap the planets, click the logo,
+                        or explore the cards below to see what I've been working on.
+                    </p>
+                    <div class="skill-tags">
+                        <span class="skill-tag">HTML & CSS</span>
+                        <span class="skill-tag">JavaScript</span>
+                        <span class="skill-tag">React</span>
+                        <span class="skill-tag">UI Design</span>
+                        <span class="skill-tag">Tailwind</span>
                     </div>
-                    <div class="link-card-shine"></div>
-                </a>
-
-                <a href="https://forsalelandingpage.vercel.app" 
-                   target="_blank"
-                   rel="noopener noreferrer"
-                   class="link-card group block p-4 sm:p-6 bg-white rounded-2xl shadow-lg hover:shadow-2xl transform transition-all duration-300 hover:bg-gray-50 w-full relative overflow-hidden">
-                    <div class="link-card-bg"></div>
-                    <div class="flex items-start space-x-3 sm:space-x-4 relative z-10">
-                        <div class="flex-shrink-0">
-                            <div class="icon-wrapper w-12 h-12 bg-indigo-50 rounded-xl flex items-center justify-center text-indigo-600 group-hover:rotate-12 transition-transform">
-                                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"></path></svg>
-                            </div>
-                        </div>
-                        <div class="flex-1 min-w-0">
-                            <h3 class="link-card-title text-lg sm:text-xl font-bold text-gray-900 mb-1">
-                                For Sale Landing Page
-                            </h3>
-                            <p class="text-gray-600 text-xs sm:text-sm">
-                                Modern landing page template for sale with admin panel
-                            </p>
-                        </div>
-                        <div class="flex-shrink-0">
-                            <svg class="arrow-icon w-5 h-5 text-gray-400 group-hover:translate-x-2 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
-                            </svg>
-                        </div>
+                </div>
+                <div class="about-visual" aria-hidden="true">
+                    <div class="orbit-mini">
+                        <div class="orbit-mini-ring"></div>
+                        <div class="orbit-mini-planet"></div>
                     </div>
-                    <div class="link-card-shine"></div>
-                </a>
+                </div>
+            </div>
+        </section>
 
-                <a href="https://4businesspage.vercel.app/" 
-                   target="_blank"
-                   rel="noopener noreferrer"
-                   class="link-card group block p-4 sm:p-6 bg-white rounded-2xl shadow-lg hover:shadow-2xl transform transition-all duration-300 hover:bg-gray-50 w-full relative overflow-hidden">
-                    <div class="link-card-bg"></div>
-                    <div class="flex items-start space-x-3 sm:space-x-4 relative z-10">
-                        <div class="flex-shrink-0">
-                            <div class="icon-wrapper w-12 h-12 bg-indigo-50 rounded-xl flex items-center justify-center text-indigo-600 group-hover:rotate-12 transition-transform">
-                                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"></path></svg>
-                            </div>
-                        </div>
-                        <div class="flex-1 min-w-0">
-                            <h3 class="link-card-title text-lg sm:text-xl font-bold text-gray-900 mb-1">
-                                For Sale Business Landing Page
-                            </h3>
-                            <p class="text-gray-600 text-xs sm:text-sm">
-                                Modern business landing page for sale with admin panel
-                            </p>
-                        </div>
-                        <div class="flex-shrink-0">
-                            <svg class="arrow-icon w-5 h-5 text-gray-400 group-hover:translate-x-2 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
-                            </svg>
-                        </div>
-                    </div>
-                    <div class="link-card-shine"></div>
-                </a>
-
-                <a href="https://quote-generator-swart-ten.vercel.app/" 
-                   target="_blank"
-                   rel="noopener noreferrer"
-                   class="link-card group block p-4 sm:p-6 bg-white rounded-2xl shadow-lg hover:shadow-2xl transform transition-all duration-300 hover:bg-gray-50 w-full relative overflow-hidden">
-                    <div class="link-card-bg"></div>
-                    <div class="flex items-start space-x-3 sm:space-x-4 relative z-10">
-                        <div class="flex-shrink-0">
-                            <div class="icon-wrapper w-12 h-12 bg-indigo-50 rounded-xl flex items-center justify-center text-indigo-600 group-hover:rotate-12 transition-transform">
-                                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"></path></svg>
-                            </div>
-                        </div>
-                        <div class="flex-1 min-w-0">
-                            <h3 class="link-card-title text-lg sm:text-xl font-bold text-gray-900 mb-1">
-                                Quote Generator with AI chatbot
-                            </h3>
-                            <p class="text-gray-600 text-xs sm:text-sm">
-                                Generate inspirational quotes and chat with AI
-                            </p>
-                        </div>
-                        <div class="flex-shrink-0">
-                            <svg class="arrow-icon w-5 h-5 text-gray-400 group-hover:translate-x-2 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
-                            </svg>
-                        </div>
-                    </div>
-                    <div class="link-card-shine"></div>
-                </a>
-            </section>
-
-            <!-- Footer -->
-            <footer class="text-center text-white/80 text-sm">
-                <p>&copy; <span id="year"></span>. All rights reserved.</p>
-            </footer>
-        </div>
+        <footer class="site-footer">
+            <p>&copy; <span id="year"></span> Emil. Crafted among the stars.</p>
+            <p class="footer-hint">Tip: click the EP logo or planets for a surprise ✨</p>
+        </footer>
     </main>
 
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/flowbite/2.2.0/flowbite.min.js"></script>
     <script src="script.js"></script>
     <script>
         document.getElementById('year').textContent = new Date().getFullYear();
